@@ -1,0 +1,19 @@
+<div class="container">
+    <h1>New Article</h1>
+    <form action="" (ngSubmit)="onSubmit()">
+        <div class="form-group mb-2">
+            <label for="title">Title</label>
+            <input required type="text" id="title" name="title" class="form-control" [(ngModel)]="title">
+        </div>
+        <div class="form-group mb-2">
+            <label for="description">Description</label>
+            <textarea required id="description" name="description" class="form-control" [(ngModel)]="description"></textarea>
+        </div>
+        <div class="form-group mb-2">
+            <input type="file" (change)="selectFile($event)" accept=".jpg, .jpeg, .png" id="image">
+            <label for="image" class="image__label"></label>
+        </div>
+        <a href="/articles" class="btn btn-secondary me-2">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
