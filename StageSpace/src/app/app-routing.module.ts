@@ -25,7 +25,9 @@ const routes: Routes = [
     { path: "chatting", 
       loadChildren: () => import('./modules/chatting/chatting.module').then((m) => m.ChattingModule) },
     { path: "auth",
-      loadChildren: () => import('./modules/auth/auth.module').then((m) => m.AuthModule) }
+      loadChildren: () => import('./modules/auth/auth.module').then((m) => m.AuthModule) },
+    { path: "main",
+      loadChildren: () => import('./modules/main/main.module').then((m) => m.MainModule) }
 ];
   
 @NgModule({

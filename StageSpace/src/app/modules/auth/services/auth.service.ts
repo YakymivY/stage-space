@@ -1,11 +1,14 @@
 import { environment } from './../../../environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  subject = new Subject();
 
   constructor(private http: HttpClient) { }
 
@@ -26,6 +29,13 @@ export class AuthService {
   }
 
   loadUsername() {
-    return this.http.get(environment.apiURL + '/get-name');
+    return this.http.get(environment.apiURL + '/get-name').subscribe(
+      (response: any) => {
+        this.subject.next(response);
+      },
+      error => {
+        console.log("ERROR: ", error)
+      }
+    );
   }
 }

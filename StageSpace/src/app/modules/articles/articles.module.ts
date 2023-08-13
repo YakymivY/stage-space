@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
 
 import { ArticlesRoutingModule } from './articles-routing.module';
 import { CoreModule } from 'src/app/core/core.module';
-import { HeaderComponent } from '../../core/components/header/header.component';
 
 
 @NgModule({

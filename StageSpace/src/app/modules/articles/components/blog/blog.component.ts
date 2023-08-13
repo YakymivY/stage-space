@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ArticleService } from '../../services/article.service';
 import { Router } from '@angular/router';
 
-import { HeaderComponent } from 'src/app/core/components/header/header.component';
-
 interface Article {
   _id: any,
   title: string,
