@@ -4,8 +4,9 @@
     <a href="articles/new" class="btn btn-success">New Article</a>
     <div class="card mt-4" *ngFor="let article of articles; let i = index;">
         <div class="card-body">
+            <h4 class="card-title m-0">{{ article.title }}</h4>
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <h4 class="card-title m-0">{{ article.title }}</h4>
+                <a class="link-info link-underline link-underline-opacity-0 m-0" [href]="'main/profile/' + article.userId">{{article.username}}</a>
                 <div class="card-subtitle text-muted m-0">{{ article.date }}</div>
             </div>
             <div class="card-text mb-2">{{ article.description }}</div>

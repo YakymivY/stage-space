@@ -1,28 +1,43 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ArticleService } from '../../services/article.service';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
+import { StartService } from 'src/app/modules/main/services/start.service';
 
 @Component({
   selector: 'app-new-article',
   templateUrl: './new-article.component.html',
   styleUrls: ['./new-article.component.css']
 })
-export class NewArticleComponent {
+export class NewArticleComponent implements OnInit {
 
   title: string = '';
   description: string = '';
   postImage: any = '';
 
-  constructor(private service: ArticleService, private router: Router) {}
+  username: string = '';
+  userId: string = '';
 
-  async selectFile(event: any) {
-    const image = event.target.files[0];
-    const base64 = await convertToBase64(image);
-    this.postImage = base64;
+  constructor(private service: ArticleService, private router: Router, private authService: AuthService, private startService: StartService) {}
+
+  ngOnInit () {
+    this.authService.loadUser().subscribe(
+      (response: any) => {
+        this.username = response.username;
+        this.userId = response.id;
+      },
+      error => {
+        console.log("ERROR: ", error);
+      }
+    );
+  }
+
+  async uploadImage(event: any) {
+    this.postImage = await this.startService.selectFile(event);
   }
 
   onSubmit() {
-    this.service.createArticle(this.title, this.description, this.postImage).subscribe(
+    this.service.createArticle(this.title, this.description, this.postImage, this.username, this.userId).subscribe(
       (response: any) => {
         if (response.redirect) {
           this.router.navigate(['/article/' + response.redirect]);
@@ -39,18 +54,4 @@ export class NewArticleComponent {
     );
   }
 
-}
-
-
-function convertToBase64(file: any) {
-  return new Promise ((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-    fileReader.onload = () => {
-      resolve(fileReader.result);
-    };
-    fileReader.onerror = (error) => {
-      reject(error);
-    };
-  });
 }

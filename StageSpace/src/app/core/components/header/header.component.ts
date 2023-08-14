@@ -10,16 +10,24 @@ import { AuthService } from '../../../modules/auth/services/auth.service';
 export class HeaderComponent {
 
   username: any = '';
+  userId: string = '';
 
   constructor(private service: AuthService, private router: Router) {}
 
 
   ngOnInit() {
-    this.service.loadUsername();
-    this.service.subject.subscribe((value) => {
-      console.log(value);
-      this.username = value;
-    });
+    this.service.loadUser().subscribe(
+      (response: any) => {
+        this.username = response.username;
+        this.userId = response.id;
+      }, 
+      error => {
+        console.log("ERROR: ", error);
+      }
+    );
+    // this.service.subject.subscribe((value) => {
+    //   this.username = value;
+    // });
   }
 
   logout() {

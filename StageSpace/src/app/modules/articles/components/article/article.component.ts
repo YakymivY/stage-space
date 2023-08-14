@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 export class ArticleComponent implements OnInit{
 
   id: string | null = '';
+  username: string = '';
+  userId: string = '';
   title: string = '';
   description: string = '';
   date: any;
@@ -25,10 +27,12 @@ export class ArticleComponent implements OnInit{
         if (response.redirect) {
           this.router.navigate([response.redirect]);
         }
+        this.username = response.username;
         this.title = response.title;
         this.description = response.description;
         this.date = new Date(response.date).toLocaleDateString();
         this.image = response.image;
+        this.userId = response.userId;
       },
       error => {
         console.log(error);

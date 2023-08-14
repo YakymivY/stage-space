@@ -1,0 +1,9 @@
+<app-header></app-header>
+<div class="container">
+    <div class="profile__head d-flex justify-content-between align-items-center">
+        <img [src]="profileImage" class="profile__picture">
+        <input type="file" (change)="uploadProfilePicture($event)" accept=".jpg, .jpeg, .png" id="image">
+        <label for="image" class="profile__picture"></label>
+        <h1 class="profile__username">{{ user?.username }}</h1>
+    </div>
+</div>

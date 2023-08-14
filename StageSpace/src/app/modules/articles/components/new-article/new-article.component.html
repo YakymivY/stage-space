@@ -1,3 +1,4 @@
+<app-header></app-header>
 <div class="container">
     <h1>New Article</h1>
     <form action="" (ngSubmit)="onSubmit()">
@@ -10,10 +11,10 @@
             <textarea required id="description" name="description" class="form-control" [(ngModel)]="description"></textarea>
         </div>
         <div class="form-group mb-2">
-            <input type="file" (change)="selectFile($event)" accept=".jpg, .jpeg, .png" id="image">
+            <input type="file" (change)="uploadImage($event)" accept=".jpg, .jpeg, .png" id="image">
             <label for="image" class="image__label"></label>
         </div>
-        <a href="/articles" class="btn btn-secondary me-2">Cancel</a>
+        <a href="/articles/all" class="btn btn-secondary me-2">Cancel</a>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>

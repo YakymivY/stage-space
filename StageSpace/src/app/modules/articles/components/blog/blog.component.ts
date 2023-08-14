@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 
 interface Article {
   _id: any,
+  username: string,
+  userId: string,
   title: string,
   date: string,
   description: string,

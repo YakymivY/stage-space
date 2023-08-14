@@ -2,6 +2,8 @@ import { environment } from './../../../environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { share } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -24,18 +26,15 @@ export class AuthService {
     return this.http.post(environment.nonApiURL + '/login', { email, password });
   }
 
-  loadStartpage() {
-    return this.http.get(environment.apiURL + '/get-name');
-  }
-
-  loadUsername() {
-    return this.http.get(environment.apiURL + '/get-name').subscribe(
-      (response: any) => {
-        this.subject.next(response);
-      },
-      error => {
-        console.log("ERROR: ", error)
-      }
-    );
+  loadUser(): Observable<any> {
+    // return this.http.get(environment.apiURL + '/get-name').subscribe(
+    //   (response: any) => {
+    //     this.subject.next(response);
+    //   },
+    //   error => {
+    //     console.log("ERROR: ", error)
+    //   }
+    // );
+    return this.http.get(environment.apiURL + '/get-name').pipe(share());
   }
 }

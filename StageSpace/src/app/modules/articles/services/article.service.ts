@@ -9,8 +9,8 @@ export class ArticleService {
 
   constructor(private http: HttpClient) { }
 
-  createArticle(title: string, description: string, image: string) {
-    return this.http.post(environment.apiURL + '/post-article', { title, description, image });
+  createArticle(title: string, description: string, image: string, username: string, id: string) {
+    return this.http.post(environment.apiURL + '/post-article', { title, description, image, username, id });
   }
 
   getArticle(id: any) {
