@@ -1,9 +1,19 @@
 <app-header></app-header>
 <div class="container">
     <div class="profile__head d-flex justify-content-between align-items-center">
-        <img [src]="profileImage" class="profile__picture">
-        <input type="file" (change)="uploadProfilePicture($event)" accept=".jpg, .jpeg, .png" id="image">
-        <label for="image" class="profile__picture"></label>
+        <img [src]="profileImage || '../../../../assets/png/profile.png'" class="profile__picture">
         <h1 class="profile__username">{{ user?.username }}</h1>
+    </div>
+    <div class="card mt-4" *ngFor="let article of userArticles; let i = index;">
+        <div class="card-body">
+            <h4 class="card-title m-0">{{ article.title }}</h4>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <a class="link-info link-underline link-underline-opacity-0 m-0" [href]="'main/profile/' + article.userId">{{article.username}}</a>
+                <div class="card-subtitle text-muted m-0">{{ article.date }}</div>
+            </div>
+            <div class="card-text mb-2">{{ article.description }}</div>
+            <img class="post-image mb-2" [src]="article.image" alt="">
+            <a [href]="'article/' + article._id" class="btn btn-primary me-2">Read more</a>
+        </div>
     </div>
 </div>

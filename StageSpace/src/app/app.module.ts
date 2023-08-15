@@ -3,6 +3,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ArticlesModule } from './modules/articles/articles.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
+import { ProfileModule } from './modules/profile/profile.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -26,7 +27,8 @@ import { AppComponent } from './app.component';
     SharedModule,
     ArticlesModule,
     AuthModule,
-    ChattingModule
+    ChattingModule,
+    ProfileModule
   ],
   providers: [],
   bootstrap: [AppComponent]

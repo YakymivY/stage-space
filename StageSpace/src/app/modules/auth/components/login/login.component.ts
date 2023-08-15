@@ -26,7 +26,7 @@ export class LoginComponent {
             this.error = "Incorrect email or password";
           } else if (response.status === "success") {
             sessionStorage.setItem("token", response.token);
-            this.router.navigate(['start']);
+            this.router.navigate(['main/start']);
           }
         },
         error => {

@@ -19,8 +19,6 @@ export class StartService {
     return finalImage;
   }
 
-
-
   //
 
 
@@ -30,7 +28,12 @@ export class StartService {
 
   getUser(id: any) {
     const params = new HttpParams().set('id', id);
-    return this.http.get(environment.apiURL + "/get-user", { params });
+    return this.http.get(environment.apiURL + "/get-user", { params }); //users.ts
+  }
+
+  getUserArticles(id: any) {
+    const params = new HttpParams().set('id', id);
+    return this.http.get(environment.apiURL + "/get-user-articles", { params }); //users.ts
   }
 
 }

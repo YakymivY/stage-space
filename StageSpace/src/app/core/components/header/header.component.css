@@ -9,3 +9,9 @@
     height: 15px;
     cursor: pointer;
 }
+
+.header__profile-img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}

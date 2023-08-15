@@ -27,14 +27,10 @@ export class AuthService {
   }
 
   loadUser(): Observable<any> {
-    // return this.http.get(environment.apiURL + '/get-name').subscribe(
-    //   (response: any) => {
-    //     this.subject.next(response);
-    //   },
-    //   error => {
-    //     console.log("ERROR: ", error)
-    //   }
-    // );
-    return this.http.get(environment.apiURL + '/get-name').pipe(share());
+    return this.http.get(environment.apiURL + '/get-token-user').pipe(share());
+  }
+
+  loadProfilePicture(): Observable<any> {
+    return this.http.get(environment.apiURL + '/get-profile-picture');
   }
 }
