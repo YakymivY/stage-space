@@ -3,23 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { StartService } from '../../services/start.service';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 
-interface User {
-  id: string,
-  email: string,
-  username: string,
-  role: string,
-  profilePicture: string
-}
-
-interface Article {
-  _id: any,
-  username: string,
-  userId: string,
-  title: string,
-  date: string,
-  description: string,
-  image: string
-}
+//SHARED
+import { Article, User } from '../../../../shared/shared.interfaces';
+//
 
 @Component({
   selector: 'app-profile',

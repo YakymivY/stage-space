@@ -28,12 +28,16 @@ export class StartService {
 
   getUser(id: any) {
     const params = new HttpParams().set('id', id);
-    return this.http.get(environment.apiURL + "/get-user", { params }); //users.ts
+    return this.http.get(environment.apiURL + "/get-user", { params }); // -> users.ts
   }
 
   getUserArticles(id: any) {
     const params = new HttpParams().set('id', id);
-    return this.http.get(environment.apiURL + "/get-user-articles", { params }); //users.ts
+    return this.http.get(environment.apiURL + "/get-user-articles", { params }); // -> users.ts
+  }
+
+  followUser(followingId: any) {
+    return this.http.post(environment.apiURL + "/follow-user", { followingId }); // -> users.ts
   }
 
 }

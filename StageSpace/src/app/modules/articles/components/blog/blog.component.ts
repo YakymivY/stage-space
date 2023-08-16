@@ -2,15 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ArticleService } from '../../services/article.service';
 import { Router } from '@angular/router';
 
-interface Article {
-  _id: any,
-  username: string,
-  userId: string,
-  title: string,
-  date: string,
-  description: string,
-  image: string
-}
+//SHARED
+import { Article } from '../../../../shared/shared.interfaces';
+//
 
 @Component({
   selector: 'app-blog',

@@ -3,13 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 
-interface User {
-  id: string,
-  email: string,
-  username: string,
-  role: string, 
-  profilePicture: string
-}
+//SHARED
+import { User } from '../../../../shared/shared.interfaces'
+//
 
 @Component({
   selector: 'app-my-profile',
