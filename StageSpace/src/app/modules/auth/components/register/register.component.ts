@@ -8,7 +8,8 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegisterComponent {
   
-  roleActive: boolean = true; //true = actor; false = director
+  role: string = 'actor';
+  roleActive: boolean = true; //true = actor, false = director
 
   name: string = '';
   email: string = '';
@@ -21,10 +22,12 @@ export class RegisterComponent {
 
   actorPill() {
     this.roleActive = true;
+    this.role = "actor";
   }
 
   directorPill() {
     this.roleActive = false;
+    this.role = "director";
   }
 
   onSubmit() {
@@ -34,7 +37,7 @@ export class RegisterComponent {
       if (!this.name || !this.email || !this.password || !this.confirm) {
         this.error = "Please, fill all the fields";
       } else {
-        this.service.onRegister(this.email, this.password, this.name, this.roleActive).subscribe(
+        this.service.onRegister(this.email, this.password, this.name, this.role).subscribe(
           (response: any) => {
             if(response.status === "incorrect") {
               this.error = "This email is already registerred";

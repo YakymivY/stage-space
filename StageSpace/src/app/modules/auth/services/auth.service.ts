@@ -14,12 +14,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  onRegister(email: string, password: string, name: string, role: boolean) {
-    if (role) {
-      return this.http.post(environment.nonApiURL + '/register-actor', { email, password, name });
-    } else {
-      return this.http.post(environment.nonApiURL + '/register-director', { email, password, name });
-    }
+  onRegister(email: string, password: string, name: string, role: string) {
+      return this.http.post(environment.nonApiURL + '/register', { email, password, name, role });
   }
 
   onLogin(email: string, password: string) {

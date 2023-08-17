@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 //SHARED
 import { Article } from '../../../../shared/shared.interfaces';
+import { convertDate } from 'src/app/shared/utils';
 //
 
 @Component({
@@ -26,29 +27,7 @@ export class BlogComponent implements OnInit {
           return;
         }
         for (let i = 0; i < response.length; i++) {
-          const newDate = new Date(response[i].date);
-
-          const yyyy = newDate.getFullYear();
-          let mm = newDate.getMonth() + 1;
-          let dd = newDate.getDate();
-          let hh = newDate.getHours();
-          let min = newDate.getMinutes();
-          let ddString, mmString;
-
-          if (dd < 10) {
-            ddString = '0' + dd;
-          } else {
-            ddString = dd;
-          }
-          if (mm < 10) {
-            mmString = '0' + mm;
-          } else {
-            mmString = mm;
-          }
-
-          const formatted = hh + ':' + min + ' ' + ddString + '.' + mmString + '.' + yyyy;
-
-          response[i].date = formatted;
+          response[i].date = convertDate(response[i].date);
         }
         this.articles = response;
       },

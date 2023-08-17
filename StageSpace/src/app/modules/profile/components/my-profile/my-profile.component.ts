@@ -4,7 +4,8 @@ import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 
 //SHARED
-import { User } from '../../../../shared/shared.interfaces'
+import { User, Article } from '../../../../shared/shared.interfaces';
+import { convertDate } from 'src/app/shared/utils';
 //
 
 @Component({
@@ -15,6 +16,7 @@ import { User } from '../../../../shared/shared.interfaces'
 export class MyProfileComponent implements OnInit {
 
   user: User | null = null;
+  articles: Article[] = [];
   profileImage: any;
 
   constructor(private authService: AuthService, private startService: StartService, private service: ProfileService) {}
@@ -36,11 +38,22 @@ export class MyProfileComponent implements OnInit {
         console.log("ERROR: ", error);
       }
     );
+    this.startService.getUserArticles(this.user?._id).subscribe(
+      (response: any) => {
+        for (let i = 0; i < response.articles.length; i++) {
+          response.articles[i].date = convertDate(response.articles[i].date);
+        }
+        this.articles = response.articles;
+      },
+      error => {
+        console.log("ERROR: ", error);
+      }
+    );
   }
 
   async uploadProfilePicture(event: any) {
     this.profileImage = await this.startService.selectFile(event);
-    if (this.user) this.service.saveProfilePic(this.user.id, this.user.role, this.profileImage).subscribe(
+    if (this.user) this.service.saveProfilePic(this.profileImage).subscribe(
       (response: any) => {
         console.log(response);
         //some other actions

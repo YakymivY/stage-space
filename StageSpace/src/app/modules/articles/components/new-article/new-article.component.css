@@ -13,3 +13,6 @@
     background-position: center;
     cursor: pointer;
 }
+.image__icon {
+    width: 100px;
+}

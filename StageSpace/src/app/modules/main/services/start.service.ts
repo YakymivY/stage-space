@@ -32,12 +32,18 @@ export class StartService {
   }
 
   getUserArticles(id: any) {
-    const params = new HttpParams().set('id', id);
+    const passId = id || 'no id';
+    const params = new HttpParams().set('id', passId);
     return this.http.get(environment.apiURL + "/get-user-articles", { params }); // -> users.ts
   }
 
   followUser(followingId: any) {
     return this.http.post(environment.apiURL + "/follow-user", { followingId }); // -> users.ts
+  }
+
+  unfollowUser(followingId: any) {
+    const params = new HttpParams().set('id', followingId);
+    return this.http.delete(environment.apiURL + "/unfollow-user", { params }); // -> users.ts
   }
 
 }

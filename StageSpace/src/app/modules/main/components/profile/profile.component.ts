@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/modules/auth/services/auth.service';
 
 //SHARED
 import { Article, User } from '../../../../shared/shared.interfaces';
+import { convertDate } from 'src/app/shared/utils';
 //
 
 @Component({
@@ -37,18 +38,16 @@ export class ProfileComponent implements OnInit{
     );
     this.service.getUserArticles(this.id).subscribe(
       (response: any) => {
+        for (let i = 0; i < response.articles.length; i++) {
+          response.articles[i].date = convertDate(response.articles[i].date);
+        }
         this.userArticles = response.articles;
-        console.log(this.userArticles);
       },
       error => {
         console.log("ERROR: ", error);
       }
     );
   }
-
-  // async uploadProfilePicture (event: any) {
-  //   this.profileImage = await this.service.selectFile(event);
-  // }
 
 
 }

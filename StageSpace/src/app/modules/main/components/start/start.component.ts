@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { StartService } from '../../services/start.service';
 
 //SHARED
-import { Actor, Director } from './../../../../shared/shared.interfaces';
+import { User } from './../../../../shared/shared.interfaces';
 //
 
 @Component({
@@ -13,8 +13,9 @@ import { Actor, Director } from './../../../../shared/shared.interfaces';
 })
 export class StartComponent implements OnInit {
 
-  actors: Actor[] = [];
-  directors: Director[] = [];
+  users: User[] = [];
+  actors: User[] = [];
+  directors: User[] = [];
 
   isFollowed: boolean = false;
 
@@ -24,19 +25,12 @@ export class StartComponent implements OnInit {
 
     this.service.loadUsers().subscribe(
       (response: any) => {
-        this.actors = response.actors;
-        this.directors = response.directors;
-        //temporary set users as unfollowing
-        for (let i = 0; i < this.actors.length; i++) this.actors[i].followed = false;
-        for (let j = 0; j < this.directors.length; j++) this.directors[j].followed = false;
-        //
-        this.actors.forEach(user => {
+        this.users = response.users;
+        this.users.forEach(user => {
+          user.role === "actor" ? this.actors.push(user) : this.directors.push(user);
           if (response.myFollows.some((myFollow: { following: string }) => myFollow.following === user._id)) user.followed = true;
         });
-        this.directors.forEach(user => {
-          if (response.myFollows.some((myFollow: { following: string }) => myFollow.following === user._id)) user.followed = true;
-        });
-        console.log(response);
+        console.log(this.users, this.actors, this.directors);
       },
       error => {
         console.log("ERROR: ", error);
@@ -48,6 +42,16 @@ export class StartComponent implements OnInit {
     this.actors[i].followed = !this.actors[i].followed;
     if (this.actors[i].followed === true) {
       this.service.followUser(this.actors[i]._id).subscribe(
+        (response: any) => {
+          console.log(response);
+        },
+        error => {
+          console.log("ERROR: ", error);
+        }
+      );
+    } else {
+      console.log("unfollow");
+      this.service.unfollowUser(this.actors[i]._id).subscribe(
         (response: any) => {
           console.log(response);
         },

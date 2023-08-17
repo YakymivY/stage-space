@@ -11,11 +11,12 @@ export interface Article {
 }
 
 export interface User {
-    id: string,
+    _id: string,
     email: string,
     username: string,
     role: string,
-    profilePicture: string
+    profilePicture: string,
+    followed: boolean;
 }
 
 export interface Actor {
