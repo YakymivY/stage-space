@@ -27,4 +27,8 @@ export class ArticleService {
     return this.http.delete(environment.apiURL + '/delete-article', { params });
   }
 
+  getFollowings() {
+    return this.http.get(environment.apiURL + '/get-followings');
+  }
+
 }

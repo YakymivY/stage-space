@@ -15,7 +15,10 @@ import { convertDate } from 'src/app/shared/utils';
 
 export class BlogComponent implements OnInit {
   
+  follows: any[] = [];
   articles: Article[] = [];
+
+  modalImage: string = '';
 
   constructor (private service: ArticleService, private router: Router) {}
 
@@ -48,5 +51,9 @@ export class BlogComponent implements OnInit {
         console.log("ERROR: ", error);
       }
     );
+  }
+
+  showImage(image: string) {
+    this.modalImage = image;
   }
 }
