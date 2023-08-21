@@ -19,13 +19,15 @@ export class ChatComponent implements OnInit {
 
   imageSRC: any;
 
-  constructor(private webSocketService: WebsocketService, private router: Router) {this.socket = io('http://localhost:3001')}
+  constructor(private webSocketService: WebsocketService, private router: Router) {this.socket = io('http://localhost:3001', {
+    query: { token: sessionStorage.getItem('token') }
+  })}
 
   ngOnInit(): void {
-    this.username = localStorage.getItem('username');
+    //this.username = localStorage.getItem('username');
     this.room = localStorage.getItem('room');
 
-    this.socket.emit('joinRoom', {username: this.username, room: this.room});
+    this.socket.emit('joinRoom', {room: this.room});
 
     //get room and users
     this.socket.on('roomUsers', ({ room, users }) => {
@@ -70,6 +72,7 @@ export class ChatComponent implements OnInit {
   // }
 
   leaveRoom () {
+    this.socket.disconnect();
     this.router.navigate(['enter']);
   }
 
