@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: "chat", component: ChatComponent },
+  { path: "chat/:userId", component: ChatComponent },
   { path: "enter", component: EnterComponent }
 ];
 

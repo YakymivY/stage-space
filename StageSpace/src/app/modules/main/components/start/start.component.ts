@@ -1,6 +1,6 @@
-import { AuthService } from '../../../auth/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { StartService } from '../../services/start.service';
+import { Router } from '@angular/router';
 
 //SHARED
 import { User } from './../../../../shared/shared.interfaces';
@@ -19,7 +19,7 @@ export class StartComponent implements OnInit {
 
   isFollowed: boolean = false;
 
-  constructor(private authService: AuthService, private service: StartService) { }
+  constructor(private router: Router, private service: StartService) { }
 
   ngOnInit() {
 
@@ -74,5 +74,13 @@ export class StartComponent implements OnInit {
         }
       );
     }
+  }
+
+  onChatActor(i: number) {
+    this.router.navigate(['/chatting/chat', this.actors[i]._id]);
+  }
+
+  onChatDirector(j: number) {
+    //same actions but for directors
   }
 }

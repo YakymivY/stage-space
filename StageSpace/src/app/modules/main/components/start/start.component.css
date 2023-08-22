@@ -1,3 +1,11 @@
 .user__container {
     width: 100%;
 }
+.messenger__img {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+.utils__container {
+    width: 110px;
+}

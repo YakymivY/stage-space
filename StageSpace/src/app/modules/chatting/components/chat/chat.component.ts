@@ -1,7 +1,7 @@
 import { WebsocketService } from './../../services/websocket.service';
 import { Component, OnInit } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class ChatComponent implements OnInit {
 
   private socket: Socket;
-  username: string | null = '';
+  userId: string = '';
   room: string | null = '';
   users: any[] = [];
   messages: any[] = [];
@@ -19,15 +19,18 @@ export class ChatComponent implements OnInit {
 
   imageSRC: any;
 
-  constructor(private webSocketService: WebsocketService, private router: Router) {this.socket = io('http://localhost:3001', {
+  constructor(private webSocketService: WebsocketService, private router: Router, private route: ActivatedRoute) {this.socket = io('http://localhost:3001', {
     query: { token: sessionStorage.getItem('token') }
   })}
 
   ngOnInit(): void {
-    //this.username = localStorage.getItem('username');
+    this.route.params.subscribe(params => {
+      this.userId = params['userId'];
+    });
     this.room = localStorage.getItem('room');
 
-    this.socket.emit('joinRoom', {room: this.room});
+    //this.socket.emit('joinRoom', {room: this.room});
+    this.socket.emit('joinRoom', { receiverId: this.userId });
 
     //get room and users
     this.socket.on('roomUsers', ({ room, users }) => {
