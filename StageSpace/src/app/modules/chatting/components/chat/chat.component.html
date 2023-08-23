@@ -1,7 +1,6 @@
 <div class="container chat__container">
-    <div class="chat__header d-flex justify-content-between align-items-center">
+    <div class="chat__header d-flex align-items-center">
         <h1 class="chat__title">Chat</h1>
-        <a id="leave-btn" class="btn btn-outline-info" (click)="leaveRoom()">Leave Room</a>
     </div>
     <div class="chat__main d-flex">
         <aside class="chat__sidebar bg-light rounded p-3">
@@ -19,7 +18,7 @@
                     <p class="message__info text-body-secondary m-0">{{ msg.time }}</p>
                 </div>
                 <p class="message__text m-0">{{ msg.text }}</p>
-                <img class="message__image" [src]="msg.imageSRC" *ngIf="msg.imageSRC" alt="Uploaded Image" />
+                <img class="message__image" [src]="msg.image" *ngIf="msg.isImage" alt="Uploaded Image" />
             </div>
         </div>
     </div>

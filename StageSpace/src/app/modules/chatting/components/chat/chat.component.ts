@@ -1,7 +1,7 @@
-import { WebsocketService } from './../../services/websocket.service';
 import { Component, OnInit } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Router, ActivatedRoute } from '@angular/router';
+import { StartService } from 'src/app/modules/main/services/start.service';
 
 @Component({
   selector: 'app-chat',
@@ -17,35 +17,35 @@ export class ChatComponent implements OnInit {
   messages: any[] = [];
   message: string = '';
 
-  imageSRC: any;
-
-  constructor(private webSocketService: WebsocketService, private router: Router, private route: ActivatedRoute) {this.socket = io('http://localhost:3001', {
+  constructor(private startService: StartService, private router: Router, private route: ActivatedRoute) {this.socket = io('http://localhost:3001', {
     query: { token: sessionStorage.getItem('token') }
   })}
 
   ngOnInit(): void {
+    //getting userid from query
     this.route.params.subscribe(params => {
       this.userId = params['userId'];
     });
-    this.room = localStorage.getItem('room');
 
-    //this.socket.emit('joinRoom', {room: this.room});
+    //creating or joining room
     this.socket.emit('joinRoom', { receiverId: this.userId });
 
     //get room and users
-    this.socket.on('roomUsers', ({ room, users }) => {
+    this.socket.on('roomData', ({ room, users, messages }) => {
       this.outputRoomName(room);
       this.outputUsers(users);
+      const combinedArray = this.messages.concat(messages);
+      this.messages = combinedArray;
     });
 
+    //catching messages
     this.socket.on('message', (messageObj) => {
       this.outputMessage(messageObj);
     });
 
-    this.socket.on('message-photo', (messageObj) => {
-      //const blob = new Blob([messageObj.photo.body], { type: messageObj.photo.type });
-      this.outputPhoto(messageObj);
-      //this.displayImage(blob);
+    //catching photos
+    this.socket.on('message-photo', (image) => {
+      this.messages.push(image);
     });
   }
 
@@ -55,45 +55,14 @@ export class ChatComponent implements OnInit {
     this.message = '';
   }
 
-  selectFile(event: any) {
-    const photo = event.target.files[0];
-    this.socket.emit('fileMessage', {
-      type: 'file',
-      body: photo,
-      mimeType: photo.type,
-      fileName: photo.name
-    });
-  }
-
-  // displayImage(file: any): void {
-  //   const reader = new FileReader();
-  //   reader.onload = (event: any) => {
-  //     const imgURL = event.target.result;
-  //     this.imageSRC = imgURL;
-  //   };
-  //   reader.readAsDataURL(file);
-  // }
-
-  leaveRoom () {
-    this.socket.disconnect();
-    this.router.navigate(['enter']);
+  //sent request to a service to turn image object into string
+  async selectFile(event: any) {
+    const stringImg = await this.startService.selectFile(event);
+    this.socket.emit('fileMessage', stringImg);
   }
 
   outputMessage (msg: any) {
     this.messages.push(msg);
-  }
-
-  outputPhoto (msg: any) {
-    const blob = new Blob([msg.photo.body], { type: msg.photo.type });
-    //displayImage method
-    const reader = new FileReader();
-    reader.onload = (event: any) => {
-      const imgURL = event.target.result;
-      msg.message.imageSRC = imgURL;
-    };
-    reader.readAsDataURL(blob);
-    //
-    this.messages.push(msg.message);
   }
 
   outputRoomName (room: string) {
