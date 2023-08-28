@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../modules/auth/services/auth.service';
+import { UtilsService } from 'src/app/shared/services/utils.service';
 
 @Component({
   selector: 'app-header',
@@ -12,11 +12,11 @@ export class HeaderComponent {
   username: any = '';
   userId: string = '';
 
-  constructor(private service: AuthService, private router: Router) {}
+  constructor(private utilsService: UtilsService, private router: Router) {}
 
 
   ngOnInit() {
-    this.service.loadUser().subscribe(
+    this.utilsService.loadUser().subscribe(
       (response: any) => {
         this.username = response.username;
         this.userId = response.id;

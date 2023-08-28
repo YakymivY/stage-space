@@ -11,7 +11,7 @@
             <textarea required id="description" name="description" class="form-control" [(ngModel)]="description"></textarea>
         </div>
         <div class="mb-2">
-            <img [src]="postImage" class="image__icon rounded" alt="">
+            <img [src]="postImage" class="image__icon rounded" alt="" data-bs-toggle="modal" data-bs-target="#exampleModal">
         </div>
         <div class="form-group mb-2">
             <input type="file" (change)="uploadImage($event)" accept=".jpg, .jpeg, .png" id="image">
@@ -21,3 +21,6 @@
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>
+
+<!-- Modal window -->
+<app-modal-image [modalImage]="postImage"></app-modal-image>

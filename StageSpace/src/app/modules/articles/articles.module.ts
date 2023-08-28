@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 
 import { ArticlesRoutingModule } from './articles-routing.module';
 import { CoreModule } from 'src/app/core/core.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { CoreModule } from 'src/app/core/core.module';
     ArticlesRoutingModule,
     FormsModule,
     HttpClientModule,
-    CoreModule
+    CoreModule,
+    SharedModule
   ],
   exports: []
 })

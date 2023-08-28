@@ -1,7 +1,7 @@
 <app-header></app-header>
 <div class="container">
     <div class="profile__head d-flex justify-content-between align-items-center">
-        <img [src]="profileImage || '../../../../assets/png/profile.png'" class="profile__picture">
+        <img [src]="profileImage || '../../../../assets/png/profile.png'" class="profile__picture" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="showModalImage(profileImage)">
         <h1 class="profile__username">{{ user?.username }}</h1>
     </div>
     <div class="card mt-4" *ngFor="let article of userArticles; let i = index;">
@@ -12,8 +12,11 @@
                 <div class="card-subtitle text-muted m-0">{{ article.date }}</div>
             </div>
             <div class="card-text mb-2">{{ article.description }}</div>
-            <img class="post-image mb-2" [src]="article.image" alt="">
+            <img class="post-image mb-2" [src]="article.image" alt="" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="showModalImage(article.image)">
             <a [href]="'article/' + article._id" class="btn btn-primary me-2">Read more</a>
         </div>
     </div>
 </div>
+
+<!-- Modal window -->
+<app-modal-image [modalImage]="modalImage"></app-modal-image>

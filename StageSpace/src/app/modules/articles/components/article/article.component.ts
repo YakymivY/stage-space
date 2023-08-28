@@ -17,6 +17,8 @@ export class ArticleComponent implements OnInit{
   description: string = '';
   date: any;
   image: string = '';
+
+  modalImage: string = '';
   
   constructor (private route: ActivatedRoute, private router: Router, private service: ArticleService) {}
 

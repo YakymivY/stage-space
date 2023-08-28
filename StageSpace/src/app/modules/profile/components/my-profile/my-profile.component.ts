@@ -6,6 +6,7 @@ import { ProfileService } from '../../services/profile.service';
 //SHARED
 import { User, Article } from '../../../../shared/shared.interfaces';
 import { convertDate } from 'src/app/shared/utils';
+import { UtilsService } from 'src/app/shared/services/utils.service';
 //
 
 @Component({
@@ -19,10 +20,12 @@ export class MyProfileComponent implements OnInit {
   articles: Article[] = [];
   profileImage: any;
 
-  constructor(private authService: AuthService, private startService: StartService, private service: ProfileService) {}
+  modalImage: string = '';
+
+  constructor(private authService: AuthService, private startService: StartService, private utilsService: UtilsService, private service: ProfileService) {}
 
   ngOnInit() {
-    this.authService.loadUser().subscribe(
+    this.utilsService.loadUser().subscribe(
       (response: any) => {
         this.user = response;
       }, 
@@ -52,7 +55,7 @@ export class MyProfileComponent implements OnInit {
   }
 
   async uploadProfilePicture(event: any) {
-    this.profileImage = await this.startService.selectFile(event);
+    this.profileImage = await this.utilsService.selectFile(event);
     if (this.user) this.service.saveProfilePic(this.profileImage).subscribe(
       (response: any) => {
         console.log(response);
@@ -62,6 +65,10 @@ export class MyProfileComponent implements OnInit {
         console.log("ERROR: ", error);
       }
     );
+  }
+
+  showModalImage(image: string) {
+    this.modalImage = image;
   }
 
 }

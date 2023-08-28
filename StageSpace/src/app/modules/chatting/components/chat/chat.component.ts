@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Router, ActivatedRoute } from '@angular/router';
-import { StartService } from 'src/app/modules/main/services/start.service';
+import { UtilsService } from 'src/app/shared/services/utils.service';
+
+//UTILS
+import { convertDate } from 'src/app/shared/utils';
+import { ChatUser, Message } from 'src/app/shared/shared.interfaces';
+//
 
 @Component({
   selector: 'app-chat',
@@ -13,11 +18,13 @@ export class ChatComponent implements OnInit {
   private socket: Socket;
   userId: string = '';
   room: string | null = '';
-  users: any[] = [];
-  messages: any[] = [];
+  users: ChatUser[] = [];
+  messages: Message[] = [];
   message: string = '';
 
-  constructor(private startService: StartService, private router: Router, private route: ActivatedRoute) {this.socket = io('http://localhost:3001', {
+  modalImage: string = '';
+
+  constructor(private utilsService: UtilsService, private router: Router, private route: ActivatedRoute) {this.socket = io('http://localhost:3001', {
     query: { token: sessionStorage.getItem('token') }
   })}
 
@@ -30,11 +37,14 @@ export class ChatComponent implements OnInit {
     //creating or joining room
     this.socket.emit('joinRoom', { receiverId: this.userId });
 
-    //get room and users
+    //get room, users and messages
     this.socket.on('roomData', ({ room, users, messages }) => {
       this.outputRoomName(room);
       this.outputUsers(users);
       const combinedArray = this.messages.concat(messages);
+      for (let i = 0; i < combinedArray.length; i++) {
+        combinedArray[i].time = convertDate(combinedArray[i].time);
+      }
       this.messages = combinedArray;
     });
 
@@ -57,7 +67,7 @@ export class ChatComponent implements OnInit {
 
   //sent request to a service to turn image object into string
   async selectFile(event: any) {
-    const stringImg = await this.startService.selectFile(event);
+    const stringImg = await this.utilsService.selectFile(event);
     this.socket.emit('fileMessage', stringImg);
   }
 
@@ -71,5 +81,9 @@ export class ChatComponent implements OnInit {
 
   outputUsers(users: []) {
     this.users = users;
+  }
+
+  showModalImage(image: string) {
+    this.modalImage = image;
   }
 }

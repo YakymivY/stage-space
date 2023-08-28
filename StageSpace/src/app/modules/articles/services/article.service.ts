@@ -10,25 +10,25 @@ export class ArticleService {
   constructor(private http: HttpClient) { }
 
   createArticle(title: string, description: string, image: string, username: string, id: string) {
-    return this.http.post(environment.apiURL + '/post-article', { title, description, image, username, id });
+    return this.http.post(environment.apiURL + '/post-article', { title, description, image, username, id }); // -> article.ts
   }
 
   getArticle(id: any) {
     const params = new HttpParams().set('id', id);
-    return this.http.get(environment.apiURL + '/get-article', { params });
+    return this.http.get(environment.apiURL + '/get-article', { params }); // -> article.ts
   }
 
   getAllArticles() {
-    return this.http.get(environment.apiURL + '/articles');
+    return this.http.get(environment.apiURL + '/articles'); // -> article.ts
   }
 
   deleteArticle(id: any) {
     const params = new HttpParams().set('id', id);
-    return this.http.delete(environment.apiURL + '/delete-article', { params });
+    return this.http.delete(environment.apiURL + '/delete-article', { params }); //-> article.ts
   }
 
   getFollowings() {
-    return this.http.get(environment.apiURL + '/get-followings');
+    return this.http.get(environment.apiURL + '/get-followings'); //-> users.ts
   }
 
 }

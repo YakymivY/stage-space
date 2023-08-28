@@ -1,3 +1,5 @@
+<app-header></app-header>
+
 <div class="container chat__container">
     <div class="chat__header d-flex align-items-center">
         <h1 class="chat__title">Chat</h1>
@@ -18,7 +20,7 @@
                     <p class="message__info text-body-secondary m-0">{{ msg.time }}</p>
                 </div>
                 <p class="message__text m-0">{{ msg.text }}</p>
-                <img class="message__image" [src]="msg.image" *ngIf="msg.isImage" alt="Uploaded Image" />
+                <img class="message__image" [src]="msg.image" *ngIf="msg.isImage" alt="Uploaded Image" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="showModalImage(msg.image)" />
             </div>
         </div>
     </div>
@@ -31,3 +33,7 @@
         </form>
     </div>
 </div>
+
+
+<!-- Modal window -->
+<app-modal-image [modalImage]="modalImage"></app-modal-image>

@@ -28,6 +28,7 @@ export class StartComponent implements OnInit {
         this.users = response.users;
         this.users.forEach(user => {
           user.role === "actor" ? this.actors.push(user) : this.directors.push(user);
+          //mark every user as followed/unfollowed
           if (response.myFollows.some((myFollow: { following: string }) => myFollow.following === user._id)) user.followed = true;
         });
         console.log(this.users, this.actors, this.directors);

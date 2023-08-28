@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ArticleService } from '../../services/article.service';
-import { AuthService } from 'src/app/modules/auth/services/auth.service';
-import { StartService } from 'src/app/modules/main/services/start.service';
+import { UtilsService } from 'src/app/shared/services/utils.service';
 
 @Component({
   selector: 'app-new-article',
@@ -18,10 +17,10 @@ export class NewArticleComponent implements OnInit {
   username: string = '';
   userId: string = '';
 
-  constructor(private service: ArticleService, private router: Router, private authService: AuthService, private startService: StartService) {}
+  constructor(private service: ArticleService, private router: Router, private utilsService: UtilsService) {}
 
   ngOnInit () {
-    this.authService.loadUser().subscribe(
+    this.utilsService.loadUser().subscribe(
       (response: any) => {
         this.username = response.username;
         this.userId = response.id;
@@ -33,7 +32,7 @@ export class NewArticleComponent implements OnInit {
   }
 
   async uploadImage(event: any) {
-    this.postImage = await this.startService.selectFile(event);
+    this.postImage = await this.utilsService.selectFile(event);
   }
 
   onSubmit() {

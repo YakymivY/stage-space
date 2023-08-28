@@ -3,7 +3,10 @@
     <h1>{{ title }}</h1>
     <div class="text-muted mb-2">{{ date }}</div>
     <p>{{ description }}</p>
-    <img class="post-image mb-2" [src]="image" alt="">
+    <img class="post-image mb-2" [src]="image" alt="" data-bs-toggle="modal" data-bs-target="#exampleModal">
     <a href="/articles/all" class="btn btn-secondary me-2">All articles</a>
     <a href="" class="btn btn-info">Edit</a>
 </div>
+
+<!-- Modal window -->
+<app-modal-image [modalImage]="image"></app-modal-image>

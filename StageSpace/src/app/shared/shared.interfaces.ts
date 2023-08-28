@@ -32,3 +32,20 @@ export interface Director {
     username: string,
     followed: boolean
 }
+
+
+//CHAT
+export interface ChatUser {
+    _id: string,
+    email: string, 
+    username: string
+}
+
+export interface Message {
+    username: string,
+    text: string, 
+    image: string,
+    time: string,
+    isImage: boolean
+}
+//

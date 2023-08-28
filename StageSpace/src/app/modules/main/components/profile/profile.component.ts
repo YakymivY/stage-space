@@ -21,6 +21,8 @@ export class ProfileComponent implements OnInit{
   profileImage: any;
 
   userArticles: Article[] = [];
+
+  modalImage: string = '';
   
 
   constructor(private route: ActivatedRoute, private service: StartService) {}
@@ -47,6 +49,10 @@ export class ProfileComponent implements OnInit{
         console.log("ERROR: ", error);
       }
     );
+  }
+
+  showModalImage(image: string) {
+    this.modalImage = image;
   }
 
 

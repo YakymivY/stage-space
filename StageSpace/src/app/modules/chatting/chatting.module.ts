@@ -7,6 +7,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ChattingRoutingModule } from './chatting-routing.module';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { CoreModule } from 'src/app/core/core.module';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { ChattingRoutingModule } from './chatting-routing.module';
     CommonModule,
     ChattingRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    SharedModule,
+    CoreModule
   ]
 })
 export class ChattingModule { }

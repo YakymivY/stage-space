@@ -42,10 +42,11 @@ export class BlogComponent implements OnInit {
   }
 
   deleteArticle (id: any) {
+    this.articles = this.articles.filter(article => article._id != id);
     this.service.deleteArticle(id).subscribe(
       (response: any) => {
         this.router.navigate([response.redirect]);
-        this.articles = response.articles;
+        //this.articles = response.articles;
       },
       error => {
         console.log("ERROR: ", error);
