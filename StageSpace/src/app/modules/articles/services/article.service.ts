@@ -31,4 +31,13 @@ export class ArticleService {
     return this.http.get(environment.apiURL + '/get-followings'); //-> users.ts
   }
 
+  likeArticle(articleId: string) {
+    return this.http.post(environment.apiURL + '/like', { articleId }); //-> article.ts
+  }
+
+  dislikeArticle(articleId: string) {
+    const params = new HttpParams().set('articleId', articleId);
+    return this.http.delete(environment.apiURL + '/dislike', { params });
+  }
+
 }

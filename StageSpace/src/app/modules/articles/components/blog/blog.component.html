@@ -11,6 +11,9 @@
             </div>
             <div class="card-text mb-2">{{ article.description }}</div>
             <img class="post-image mb-2" [src]="article.image" alt="" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="showImage(article.image)">
+            <div class="actions__container d-flex align-items-center mb-2">
+                <img [src]="likeUrl" alt="like" class="like__button" (click)="likePost(i)">
+            </div>
             <a [href]="'article/' + article._id" class="btn btn-primary me-2">Read more</a>
             <button class="btn btn-danger" (click)="deleteArticle(article._id)">Delete</button>
         </div>

@@ -20,6 +20,8 @@ export class BlogComponent implements OnInit {
 
   modalImage: string = '';
 
+  likeUrl: string = '../../../../../assets/png/like.png';
+
   constructor (private service: ArticleService, private router: Router) {}
 
   ngOnInit () {
@@ -52,6 +54,30 @@ export class BlogComponent implements OnInit {
         console.log("ERROR: ", error);
       }
     );
+  }
+
+  likePost(i: number) {
+    if(this.likeUrl === '../../../../../assets/png/like.png') {
+      this.likeUrl = '../../../../../assets/png/dislike.png'
+      this.service.likeArticle(this.articles[i]._id).subscribe(
+        (response: any) => {
+          console.log(response);
+        },
+        error => {
+          console.log("ERROR: ", error);
+        }
+      );
+    } else {
+      this.likeUrl = '../../../../../assets/png/like.png';
+      this.service.dislikeArticle(this.articles[i]._id).subscribe(
+        (response: any) => {
+          console.log(response);
+        },
+        error => {
+          console.log("ERROR: ", error);
+        }
+      );
+    }
   }
 
   showImage(image: string) {
