@@ -32,8 +32,10 @@ export class BlogComponent implements OnInit {
           return;
         }
         for (let i = 0; i < response.length; i++) {
+          response[i].likesCount = response[i].likedUserIds.length;
           response[i].date = convertDate(response[i].date);
         }
+        console.log(response);
         this.articles = response;
       },
       error => {
@@ -57,18 +59,12 @@ export class BlogComponent implements OnInit {
   }
 
   likePost(i: number) {
-    if(this.likeUrl === '../../../../../assets/png/like.png') {
-      this.likeUrl = '../../../../../assets/png/dislike.png'
-      this.service.likeArticle(this.articles[i]._id).subscribe(
-        (response: any) => {
-          console.log(response);
-        },
-        error => {
-          console.log("ERROR: ", error);
-        }
-      );
-    } else {
-      this.likeUrl = '../../../../../assets/png/like.png';
+    if(this.articles[i].isLiked) {
+
+      //decrease like count
+      this.articles[i].likesCount--;
+
+      //sending request to delete like from db
       this.service.dislikeArticle(this.articles[i]._id).subscribe(
         (response: any) => {
           console.log(response);
@@ -77,7 +73,22 @@ export class BlogComponent implements OnInit {
           console.log("ERROR: ", error);
         }
       );
+    } else {
+
+      //increase like count
+      this.articles[i].likesCount++;
+
+      //sending request to add like to db
+      this.service.likeArticle(this.articles[i]._id).subscribe(
+        (response: any) => {
+          console.log(response);
+        },
+        error => {
+          console.log("ERROR: ", error);
+        }
+      );
     }
+    this.articles[i].isLiked = !this.articles[i].isLiked;
   }
 
   showImage(image: string) {

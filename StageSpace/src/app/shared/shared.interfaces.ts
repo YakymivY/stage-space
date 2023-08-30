@@ -7,7 +7,10 @@ export interface Article {
     title: string,
     date: string,
     description: string,
-    image: string
+    image: string,
+    likedUrlIds: string[],
+    likesCount: number,
+    isLiked: boolean
 }
 
 export interface User {
