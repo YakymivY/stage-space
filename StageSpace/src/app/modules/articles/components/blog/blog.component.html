@@ -12,9 +12,14 @@
             <div class="card-text mb-2">{{ article.description }}</div>
             <img class="post-image mb-2" [src]="article.image" alt="" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="showImage(article.image)">
             <div class="actions__container d-flex align-items-center mb-2">
-                <img [src]="article.isLiked ? '../../../../../assets/png/dislike.png' : '../../../../../assets/png/like.png' " alt="like" class="like__button" (click)="likePost(i)">
+                <img [src]="article.isLiked ? '../../../../../assets/png/dislike.png' : '../../../../../assets/png/like.png' " alt="like" class="action__button" (click)="likePost(i)">
                 <p class="like__counter m-0">{{ article.likesCount }}</p>
+                <img src="../../../../../assets/png/comment.png" alt="comment" class="action__button ms-3" (click)="openCommentForm(i)">
             </div>
+            <form action="" *ngIf="commentActive" class="comment__form mb-2" (ngSubmit)="commentPost(i)">
+                <textarea name="" id="" cols="30" rows="5" placeholder="Comment" class="comment__input rounded" name="commentContent" [(ngModel)]="commentContent"></textarea>
+                <button type="submit" class="btn btn-success">Comment</button>
+            </form>
             <a [href]="'article/' + article._id" class="btn btn-primary me-2">Read more</a>
             <button class="btn btn-danger" (click)="deleteArticle(article._id)">Delete</button>
         </div>

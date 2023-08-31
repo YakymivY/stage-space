@@ -1,7 +1,10 @@
 .post-image {
     width: 100%;
 }
-.like__button {
+.action__button {
     width: 30px;
     cursor: pointer;
+}
+.comment__input {
+    width: 100%;
 }

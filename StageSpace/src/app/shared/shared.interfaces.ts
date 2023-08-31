@@ -52,3 +52,13 @@ export interface Message {
     isImage: boolean
 }
 //
+
+//COMMENTS
+export interface Comment {
+    comment: string,
+    userId: {
+        _id: string,
+        username: string
+    }
+}
+//

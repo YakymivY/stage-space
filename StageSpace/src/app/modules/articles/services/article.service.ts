@@ -37,7 +37,16 @@ export class ArticleService {
 
   dislikeArticle(articleId: string) {
     const params = new HttpParams().set('articleId', articleId);
-    return this.http.delete(environment.apiURL + '/dislike', { params });
+    return this.http.delete(environment.apiURL + '/dislike', { params }); //-> article.ts
+  }
+
+  postComment(articleId: string, comment: string) {
+    return this.http.post(environment.apiURL + '/comment', { articleId, comment }); //->article.ts
+  }
+
+  loadComments(articleId: string) {
+    const params = new HttpParams().set('articleId', articleId);
+    return this.http.get(environment.apiURL + '/get-comments', { params }) //-article.ts
   }
 
 }

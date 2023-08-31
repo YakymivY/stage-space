@@ -3,7 +3,7 @@ import { ArticleService } from '../../services/article.service';
 import { Router } from '@angular/router';
 
 //SHARED
-import { Article } from '../../../../shared/shared.interfaces';
+import { Article, Comment } from '../../../../shared/shared.interfaces';
 import { convertDate } from 'src/app/shared/utils';
 //
 
@@ -21,6 +21,10 @@ export class BlogComponent implements OnInit {
   modalImage: string = '';
 
   likeUrl: string = '../../../../../assets/png/like.png';
+
+  commentActive: boolean = false;
+  commentContent: string = '';
+  comments: Comment[] = [];
 
   constructor (private service: ArticleService, private router: Router) {}
 
@@ -89,6 +93,39 @@ export class BlogComponent implements OnInit {
       );
     }
     this.articles[i].isLiked = !this.articles[i].isLiked;
+  }
+
+  openCommentForm(i: number) {
+    this.commentActive = !this.commentActive;
+    if(this.commentActive) {
+      this.service.loadComments(this.articles[i]._id).subscribe(
+        (response: any) => {
+          this.comments = response.comments;
+          console.log(this.comments);
+        },
+        error => {
+          console.log("ERROR: ", error);
+        }
+      );
+    }
+  }
+
+  commentPost(i: number) {
+
+    //send post request
+    this.service.postComment(this.articles[i]._id, this.commentContent).subscribe(
+      (response: any) => {
+        console.log(response);
+      },
+      error => {
+        console.log("ERROR: ", error);
+      }
+    );
+
+    //remove previous comment from the form
+    this.commentActive = !this.commentActive;
+    this.commentContent = '';
+
   }
 
   showImage(image: string) {
