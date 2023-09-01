@@ -40,6 +40,11 @@ export class ArticleService {
     return this.http.delete(environment.apiURL + '/dislike', { params }); //-> article.ts
   }
 
+  getLikeUsers(articleId: string) {
+    const params = new HttpParams().set('articleId', articleId);
+    return this.http.get(environment.apiURL + '/get-like-users', { params });
+  }
+
   postComment(articleId: string, comment: string) {
     return this.http.post(environment.apiURL + '/comment', { articleId, comment }); //->article.ts
   }

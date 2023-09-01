@@ -13,10 +13,16 @@
             <img class="post-image mb-2" [src]="article.image" alt="" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="showImage(article.image)">
             <div class="actions__container d-flex align-items-center mb-2">
                 <img [src]="article.isLiked ? '../../../../../assets/png/dislike.png' : '../../../../../assets/png/like.png' " alt="like" class="action__button" (click)="likePost(i)">
-                <p class="like__counter m-0">{{ article.likesCount }}</p>
+                <p class="like__counter m-0" (click)="showLikes(i)">{{ article.likesCount }} likes</p>
                 <img src="../../../../../assets/png/comment.png" alt="comment" class="action__button ms-3" (click)="openCommentForm(i)">
             </div>
-            <form action="" *ngIf="commentActive" class="comment__form mb-2" (ngSubmit)="commentPost(i)">
+            <form action="" *ngIf="commentActive[i]" class="comment__form mb-2" (ngSubmit)="commentPost(i)">
+                <div class="comments__container">
+                    <div class="comment d-flex align-items-center" *ngFor="let comment of comments; let j = index;">
+                        <a [href]="'main/profile/' + comment.userId._id" class="comment__username me-2">{{ comment.userId.username }}</a>
+                        <p class="comment__text m-0">{{ comment.comment }}</p>
+                    </div>
+                </div>
                 <textarea name="" id="" cols="30" rows="5" placeholder="Comment" class="comment__input rounded" name="commentContent" [(ngModel)]="commentContent"></textarea>
                 <button type="submit" class="btn btn-success">Comment</button>
             </form>
@@ -26,5 +32,14 @@
     </div>
 </div>
 
-<!-- Modal window -->
+<!-- Bootstrap Modal window -->
 <app-modal-image [modalImage]="modalImage"></app-modal-image>
+
+<!-- Likes custom modal window -->
+<div *ngIf="likesModalActive" class="modal__background d-flex justify-content-center align-items-center" (click)="hideModal()">
+    <div class="likes__modal col-6 rounded">
+        <div class="like__container d-flex align-items-center bg-light rounded mb-1 p-2" *ngFor="let like of modalLikes; let k = index;">
+            <p class="m-0">{{ like.username }}</p>
+        </div>
+    </div>
+</div>

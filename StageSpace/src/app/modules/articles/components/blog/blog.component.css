@@ -5,6 +5,23 @@
     width: 30px;
     cursor: pointer;
 }
+.like__counter {
+    cursor: pointer;
+}
 .comment__input {
     width: 100%;
+}
+ 
+/* MDDAL */
+.modal__background {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.likes__modal {
+    background-color: white;
 }

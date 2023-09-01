@@ -3,7 +3,7 @@ import { ArticleService } from '../../services/article.service';
 import { Router } from '@angular/router';
 
 //SHARED
-import { Article, Comment } from '../../../../shared/shared.interfaces';
+import { Article, Comment, ModalLike } from '../../../../shared/shared.interfaces';
 import { convertDate } from 'src/app/shared/utils';
 //
 
@@ -21,8 +21,10 @@ export class BlogComponent implements OnInit {
   modalImage: string = '';
 
   likeUrl: string = '../../../../../assets/png/like.png';
+  likesModalActive: boolean = false;
+  modalLikes: ModalLike[] = [];
 
-  commentActive: boolean = false;
+  commentActive: boolean[] = [];
   commentContent: string = '';
   comments: Comment[] = [];
 
@@ -38,6 +40,7 @@ export class BlogComponent implements OnInit {
         for (let i = 0; i < response.length; i++) {
           response[i].likesCount = response[i].likedUserIds.length;
           response[i].date = convertDate(response[i].date);
+          this.commentActive[i] = false;
         }
         console.log(response);
         this.articles = response;
@@ -95,8 +98,20 @@ export class BlogComponent implements OnInit {
     this.articles[i].isLiked = !this.articles[i].isLiked;
   }
 
+  showLikes(i: number) {
+    this.service.getLikeUsers(this.articles[i]._id).subscribe(
+      (response: any) => {
+        this.likesModalActive = true;
+        this.modalLikes = response.likes;
+      },
+      error => {
+        console.log("ERROR: ", error);
+      }
+    );
+  }
+
   openCommentForm(i: number) {
-    this.commentActive = !this.commentActive;
+    this.commentActive[i] = !this.commentActive[i];
     if(this.commentActive) {
       this.service.loadComments(this.articles[i]._id).subscribe(
         (response: any) => {
@@ -116,6 +131,7 @@ export class BlogComponent implements OnInit {
     this.service.postComment(this.articles[i]._id, this.commentContent).subscribe(
       (response: any) => {
         console.log(response);
+        this.comments.push(response.resComment);
       },
       error => {
         console.log("ERROR: ", error);
@@ -123,12 +139,16 @@ export class BlogComponent implements OnInit {
     );
 
     //remove previous comment from the form
-    this.commentActive = !this.commentActive;
+    this.commentActive[i] = !this.commentActive[i];
     this.commentContent = '';
 
   }
 
   showImage(image: string) {
     this.modalImage = image;
+  }
+
+  hideModal() {
+    this.likesModalActive = false;
   }
 }

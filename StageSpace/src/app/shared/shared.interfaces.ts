@@ -53,6 +53,15 @@ export interface Message {
 }
 //
 
+//LIKES
+export interface ModalLike {
+    id: string,
+    username: string
+}
+//
+
+
+
 //COMMENTS
 export interface Comment {
     comment: string,
