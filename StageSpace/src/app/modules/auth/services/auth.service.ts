@@ -13,8 +13,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  onRegister(email: string, password: string, name: string, role: string) {
-      return this.http.post(environment.nonApiURL + '/register', { email, password, name, role }); //-> authorization.ts
+  onRegister(email: string, password: string, name: string) {
+      return this.http.post(environment.nonApiURL + '/register', { email, password, name }); //-> authorization.ts
   }
 
   onLogin(email: string, password: string) {
