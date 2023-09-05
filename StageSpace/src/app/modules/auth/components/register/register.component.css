@@ -1,6 +1,6 @@
 .register {
     width: 100%;
-    /* height: 100vh; */
+    height: 100vh;
 }
 
 .nav-link {
@@ -25,6 +25,9 @@ form {
 }
 a {
     transition: 0.3s;
+}
+.input__error {
+    border: 1px solid red;
 }
 .single {
     color: #0dcaf0;

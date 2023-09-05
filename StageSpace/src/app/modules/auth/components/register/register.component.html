@@ -1,5 +1,5 @@
 <div class="d-flex flex-column justify-content-center align-items-center register">
-    <div class="col-lg-4 col-md-6 register__container d-flex flex-column align-items-center bg-light rounded p-xl-5 p-md-4 p-sm-3 p-3">
+    <div *ngIf="currentStep === 1" class="col-lg-4 col-md-6 register__container d-flex flex-column align-items-center bg-light rounded p-xl-5 p-md-4 p-sm-3 p-3">
 
         <h1>Regis<span class="single">t</span>er</h1>
 
@@ -44,44 +44,48 @@
             <button type="submit" class="btn btn-info mt-4" [disabled]="emailInput.invalid && emailInput.touched">Register</button>
         </form> -->
 
-        <form [formGroup]="registerForm1" class="d-flex flex-column align-items-center" (ngSubmit) = "onSubmit()">
+        <form [formGroup]="registerForm1" class="d-flex flex-column align-items-center" (ngSubmit) = "nextStep(registerForm1)">
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="name" class="register__label d-flex align-items-center">Name</label>
-                <input type="text" class="register__input form-control" id="name" formControlName="name">
+                <input type="text" class="register__input form-control" id="name" [ngClass]="{ 'input__error': name && name.invalid && name.touched }" formControlName="name">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="surname" class="register__label d-flex align-items-center">Surname</label>
-                <input type="text" class="register__input form-control" id="surname" formControlName="surname">
+                <input type="text" class="register__input form-control" id="surname" [ngClass]="{ 'input__error': surname && surname.invalid && surname.touched }" formControlName="surname">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="birthdate" class="register__label d-flex align-items-center">Birthdate</label>
-                <input type="date" class="register__input form-control" id="birthdate" formControlName="birthdate">
+                <input type="date" class="register__input form-control" id="birthdate" [ngClass]="{ 'input__error': birthdate && birthdate.invalid && birthdate.touched }" formControlName="birthdate">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="institution" class="register__label d-flex align-items-center">Studying</label>
-                <input type="text" class="register__input form-control" id="institution" formControlName="institution">
+                <input type="text" class="register__input form-control" id="institution" [ngClass]="{ 'input__error': institution && institution.invalid && institution.touched }" formControlName="institution">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="status" class="register__label d-flex align-items-center">Current status</label>
-                <input type="text" class="register__input form-control" id="status" formControlName="status">
+                <select class="register__input form-control" id="status" [ngClass]="{ 'input__error': status && status.invalid && status.touched }" formControlName="status">
+                    <option value="defaultOption" disabled>Select an option</option>
+                    <option value="studying">Currently studying</option>
+                    <option value="finished">Finished studying</option>
+                </select>
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="email" class="register__label d-flex align-items-center">Email</label>
-                <input type="email" class="register__input form-control" id="email" formControlName="email">
+                <input type="email" placeholder="email@example.com" class="register__input form-control" [ngClass]="{ 'input__error': email && email.invalid && email.touched }" id="email" formControlName="email">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="password" class="register__label d-flex align-items-center">Password</label>
-                <input type="password" class="register__input form-control" id="password" formControlName="password">
+                <input type="password" class="register__input form-control" id="password" [ngClass]="{ 'input__error': password && password.invalid && password.touched }" formControlName="password">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="confirm" class="register__label d-flex align-items-center">Confirm</label>
-                <input type="password" class="register__input form-control" id="confirm" formControlName="confirm">
+                <input type="password" class="register__input form-control" id="confirm" [ngClass]="{ 'input__error': confirm && confirm.invalid && confirm.touched }" formControlName="confirm">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="phone" class="register__label d-flex align-items-center">Phone number</label>
-                <input type="tel" class="register__input form-control" id="phone" formControlName="phone">
+                <input type="tel" placeholder="+38 (0XX) XXX XX XX" class="register__input form-control" [ngClass]="{ 'input__error': phone && phone.invalid && phone.touched }" id="phone" formControlName="phone">
             </div>
-            <button type="submit" class="btn btn-info mt-4" [disabled]="">Next</button>
+            <button type="submit" class="btn btn-info mt-4">Next</button>
         </form>
 
         <a href="/login" class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-1">Login</a>
@@ -89,39 +93,41 @@
     </div>
 
 
-    <div class="col-lg-4 col-md-6 register__container d-flex flex-column align-items-center bg-light rounded p-xl-5 p-md-4 p-sm-3 p-3">
-        <form [formGroup]="registerForm2" class="d-flex flex-column align-items-center" (ngSubmit) = "onSubmit()">
+    <div *ngIf="currentStep === 2" class="col-lg-4 col-md-6 register__container d-flex flex-column align-items-center bg-light rounded p-xl-5 p-md-4 p-sm-3 p-3">
+        <h1>Regis<span class="single">t</span>er</h1>
+        <form [formGroup]="registerForm2" class="d-flex flex-column align-items-center" (ngSubmit) = "nextStep(registerForm2)">
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="proffesion" class="register__label d-flex align-items-center">Your proffesion</label>
-                <input type="text" class="register__input form-control" id="proffesion" formControlName="proffesion">
+                <select class="register__input form-control" id="proffesion" [ngClass]="{ 'input__error': proffesion && proffesion.invalid && proffesion.touched }" formControlName="proffesion">
+                    <option disabled>Select option</option>
+                    <option value="actor">Actor</option>
+                    <option value="director">Director</option>
+                    <option value="sound">Sound</option>
+                    <option value="cameraman">Cameraman</option>
+                </select>
             </div>
-            <button type="submit" class="btn btn-info mt-4" [disabled]="">Next</button>
-        </form>
-    </div>
-
-    <div class="col-lg-4 col-md-6 register__container d-flex flex-column align-items-center bg-light rounded p-xl-5 p-md-4 p-sm-3 p-3">
-        <form [formGroup]="registerForm3" class="d-flex flex-column align-items-center" (ngSubmit) = "onSubmit()">
-            <div class="d-flex justify-content-between form__container mt-2">
+            <div *ngIf="haveExperience" class="d-flex justify-content-between form__container mt-2">
                 <label for="works" class="register__label d-flex align-items-center">Your works</label>
-                <input type="text" class="register__input form-control" id="works" formControlName="works">
+                <input type="text" placeholder="https://..." class="register__input form-control" id="works" formControlName="works">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
-                <input type="checkbox" id="no-experience" formControlName="noExperience">
+                <input type="checkbox" id="no-experience" formControlName="noExperience" (click)="onExperience()">
                 <label for="no-experience" class="register__label d-flex align-items-center">No experience</label>
             </div>
             <button type="submit" class="btn btn-info mt-4" [disabled]="">Next</button>
         </form>
     </div>
 
-    <div class="col-lg-4 col-md-6 register__container d-flex flex-column align-items-center bg-light rounded p-xl-5 p-md-4 p-sm-3 p-3">
-        <form [formGroup]="registerForm4" class="d-flex flex-column align-items-center" (ngSubmit) = "onSubmit()">
+    <div *ngIf="currentStep === 3" class="col-lg-4 col-md-6 register__container d-flex flex-column align-items-center bg-light rounded p-xl-5 p-md-4 p-sm-3 p-3">
+        <h1>Regis<span class="single">t</span>er</h1>
+        <form [formGroup]="registerForm3" class="d-flex flex-column align-items-center" (ngSubmit) = "onSubmit()">
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="phoneCode" class="register__label d-flex align-items-center">Phone Code</label>
-                <input type="text" class="register__input form-control" id="phoneCode" formControlName="phoneCode">
+                <input type="text" class="register__input form-control" id="phoneCode" [ngClass]="{ 'input__error': phoneCode && phoneCode.invalid && phoneCode.touched }" formControlName="phoneCode">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="emailCode" class="register__label d-flex align-items-center">Email Code</label>
-                <input type="text" class="register__input form-control" id="emailCode" formControlName="emailCode">
+                <input type="text" class="register__input form-control" id="emailCode" [ngClass]="{ 'input__error': emailCode && emailCode.invalid && emailCode.touched }" formControlName="emailCode">
             </div>
             <button type="submit" class="btn btn-info mt-4" [disabled]="">Register</button>
         </form>
