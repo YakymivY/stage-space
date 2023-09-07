@@ -46,7 +46,7 @@ export class RegisterComponent {
 
   currentStep: number = 1;
   haveExperience: boolean = true;
-  valuesArray: Object[] = [];
+  registrationData = {};
 
 
   constructor (private service: AuthService) {}
@@ -67,7 +67,7 @@ export class RegisterComponent {
   get status () {
     return this.registerForm1.get('status');
   }
-  get email () {
+  get email (){
     return this.registerForm1.get('email');
   }
   get password () {
@@ -105,52 +105,51 @@ export class RegisterComponent {
     return password === confirmPassword ? null : { 'passwordMismatch': true };
   }
 
-  // actorPill() {
-  //   this.roleActive = true;
-  //   this.role = "actor";
-  // }
-
-  // directorPill() {
-  //   this.roleActive = false;
-  //   this.role = "director";
-  // }
-
   onSubmit() {
     if (this.registerForm3.valid) {
-      console.log('we can submit form')
+      console.log('we can submit form');
+      this.service.onRegister(this.registrationData).subscribe(
+        (response: any) => {
+          if(response.status === "incorrect") {
+            console.log(response);
+          } else {
+            console.log("success");
+          }
+        },
+        (error) => {
+          console.log('ERROR: ', error);
+        }
+      );
     }
-    // if (this.password !== this.confirm) {
-    //   this.error = "Passwords are not the same";
-    // } else {
-    //   if (!this.name || !this.email || !this.password || !this.confirm) {
-    //     this.error = "Please, fill all the fields";
-    //   } else {
-    //     this.service.onRegister(this.email, this.password, this.name).subscribe(
-    //       (response: any) => {
-    //         if(response.status === "incorrect") {
-    //           this.error = "This email is already registerred";
-    //         } else {
-    //           console.log("success");
-    //         }
-    //       },
-    //       (error) => {
-    //         console.log('ERROR: ', error);
-    //       }
-    //     );
-    //   }
-    // }
   }
 
   nextStep(form: FormGroup) {
     if (this.currentStep < 3) {
-      if (form.valid) this.currentStep++;
+      if (form.valid) {
+        if(this.currentStep === 1) {
+          this.service.checkEmail(this.email?.value).subscribe(
+            (response: any) => {
+              if (response.exist) {
+                alert('This email is already registered');
+              } else {
+                this.currentStep++;
+              }
+            },
+            error => {
+              console.log('ERROR: ', error);
+            }
+          );
+        } else {
+          this.currentStep++;
+        }
+      }
     }
-    console.log(form.value);
-    this.valuesArray.push(form.value)
+    this.registrationData = Object.assign({}, this.registrationData, form.value);
   }
 
   onExperience() {
     this.haveExperience = !this.haveExperience;
+    this.registerForm2.get('works')?.setValue(''); //clearing works field
   }
 
 }
