@@ -23,6 +23,10 @@ form {
 .register__input {
     width: 70%;
 }
+.register__searchbox {
+    width: 70%;
+    position: relative;
+}
 a {
     transition: 0.3s;
 }
@@ -31,4 +35,21 @@ a {
 }
 .single {
     color: #0dcaf0;
+}
+.result-box {
+    position: absolute;
+    top: 100%; 
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+.result-box ul li {
+    list-style: none;
+    border-radius: 3px;
+    padding: 15px 10px;
+    cursor: pointer;
+    background-color: white;
+}
+.result-box ul li:hover {
+    background-color: #e9f3ff;
 }

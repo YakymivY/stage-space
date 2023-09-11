@@ -8,18 +8,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  
-  //role: string = 'actor';
-  //roleActive: boolean = true; //true = actor, false = director
-
-  // name: string = '';
-  // surname: string = '';
-  // birthdate: any;
-  // email: string = '';
-  // password: string = '';
-  // confirm: string = '';
-
-  // error: string = '';
 
   registerForm1 = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(2)]),
@@ -47,6 +35,10 @@ export class RegisterComponent {
   currentStep: number = 1;
   haveExperience: boolean = true;
   registrationData = {};
+
+  allInstitutions: string[] = ["Kyiv Polytechnical University", "Lviv Polytechnical University", "Shevchenka", "Franka", "Nafta"];
+  institutionsToOutput: string[] = [];
+  institutionValue: string = '';
 
 
   constructor (private service: AuthService) {}
@@ -150,6 +142,27 @@ export class RegisterComponent {
   onExperience() {
     this.haveExperience = !this.haveExperience;
     this.registerForm2.get('works')?.setValue(''); //clearing works field
+  }
+
+  showInstitutions(event: any) {
+    const value = event.target.value; //input data
+    let result = [];
+    
+    if (value.length) { //checking whether field is empty
+      result = this.allInstitutions.filter((keyword) => {
+        return keyword.toLowerCase().includes(value.toLowerCase()); //finding corresponding words in an array
+      });
+      this.institutionsToOutput = result;
+    }
+  }
+
+  hideInstitutions() {
+    this.institutionsToOutput = [];
+  }
+
+  displayInstitutionValue(institute: string) {
+    this.institutionValue = institute;
+    this.institutionsToOutput = [];
   }
 
 }
