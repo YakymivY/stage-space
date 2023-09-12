@@ -53,3 +53,13 @@ a {
 .result-box ul li:hover {
     background-color: #e9f3ff;
 }
+
+.phone__dropdown{
+    width: 30%;
+    cursor: pointer;
+    background-color: rgb(215, 215, 215);
+    transition: 0.2s;
+}
+.phone__dropdown:hover {
+    background-color: rgb(175, 175, 175);
+}

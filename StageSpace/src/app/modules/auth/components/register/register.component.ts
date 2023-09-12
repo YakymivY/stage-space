@@ -39,6 +39,11 @@ export class RegisterComponent {
   allInstitutions: string[] = ["Kyiv Polytechnical University", "Lviv Polytechnical University", "Shevchenka", "Franka", "Nafta"];
   institutionsToOutput: string[] = [];
   institutionValue: string = '';
+  haveEducation: boolean = true;
+  
+  allPhoneCodes: string[] = ["+380", "+1", "+654"];
+  phoneCodesToOutput: string[] = [];
+  phoneCodeValue: string = '+380';
 
 
   constructor (private service: AuthService) {}
@@ -144,6 +149,11 @@ export class RegisterComponent {
     this.registerForm2.get('works')?.setValue(''); //clearing works field
   }
 
+  onEducation() {
+    this.haveEducation = !this.haveEducation;
+    this.registerForm1.get('institution')?.setValue(''); //clearing institution field
+  }
+
   showInstitutions(event: any) {
     const value = event.target.value; //input data
     let result = [];
@@ -153,6 +163,8 @@ export class RegisterComponent {
         return keyword.toLowerCase().includes(value.toLowerCase()); //finding corresponding words in an array
       });
       this.institutionsToOutput = result;
+    } else {
+      this.institutionsToOutput = this.allInstitutions;
     }
   }
 
@@ -163,6 +175,48 @@ export class RegisterComponent {
   displayInstitutionValue(institute: string) {
     this.institutionValue = institute;
     this.institutionsToOutput = [];
+  }
+
+  showPhoneCodes(event: any) {
+    let value = '';
+    if (event) value = event.target.value; //input data
+    let result = [];
+    
+    if (value.length) { //checking whether field is empty
+      result = this.allPhoneCodes.filter((keyword) => {
+        return keyword.toLowerCase().includes(value.toLowerCase()); //finding corresponding words in an array
+      });
+      this.phoneCodesToOutput = result;
+    } else {
+      this.phoneCodesToOutput = this.allPhoneCodes;
+    }
+  }
+
+  clearPhoneCodes() {
+    this.phoneCodeValue = ''; //clearing entered value
+    this.showPhoneCodes(null);
+  }
+
+  displayPhoneCodeValue(phoneCode: string) {
+    this.phoneCodeValue = phoneCode;
+    this.phoneCodesToOutput = [];
+  }
+
+  formattedInputValue(value: string) {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, '');
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 2) return `(${phoneNumber}`;
+    if (phoneNumberLength < 3) return `(${phoneNumber})`;
+    if (phoneNumberLength < 6) {
+      return `(${phoneNumber.slice(0,2)}) ${phoneNumber.slice(2)}`;
+    }
+    return `(${phoneNumber.slice(0,2)}) ${phoneNumber.slice(2,5)} ${phoneNumber.slice(5,7)} ${phoneNumber.slice(7,9)}`;
+  }
+  
+  formatPhone(event: any) {
+    const value = event.target.value;
+    event.target.value = this.formattedInputValue(value);
   }
 
 }
