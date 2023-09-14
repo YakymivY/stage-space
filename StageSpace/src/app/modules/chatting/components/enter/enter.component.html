@@ -4,7 +4,7 @@
         <form action="" class="d-flex flex-column align-items-center" (ngSubmit) = "onSubmit()">
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="username" class="login__label">Username</label>
-                <input type="text" class="login__input" id="username" name="username" disabled [(ngModel)]="username">
+                <input type="text" autocomplete="off" class="login__input" id="username" name="username" disabled [(ngModel)]="username">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="room" class="login__label">Room</label>

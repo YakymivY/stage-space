@@ -13,12 +13,12 @@ export class RegisterComponent {
     name: new FormControl('', [Validators.required, Validators.minLength(2)]),
     surname: new FormControl('', [Validators.required, Validators.minLength(2)]),
     birthdate: new FormControl('', Validators.required),
-    institution: new FormControl('', Validators.required), /////////////////////
+    institution: new FormControl(''),
     status: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     confirm: new FormControl('', [Validators.required, this.passwordMatchValidator.bind(this)]),
-    phone: new FormControl('', Validators.required) ////////////////
+    phone: new FormControl('', Validators.required)
   });
 
   registerForm2 = new FormGroup({
@@ -32,7 +32,7 @@ export class RegisterComponent {
     emailCode: new FormControl('', Validators.required)
   });
 
-  currentStep: number = 1;
+  currentStep: number = 3;
   haveExperience: boolean = true;
   registrationData = {};
 
@@ -44,6 +44,8 @@ export class RegisterComponent {
   allPhoneCodes: string[] = ["+380", "+1", "+654"];
   phoneCodesToOutput: string[] = [];
   phoneCodeValue: string = '+380';
+
+  verification_code: number = NaN;
 
 
   constructor (private service: AuthService) {}
@@ -103,20 +105,23 @@ export class RegisterComponent {
   }
 
   onSubmit() {
-    if (this.registerForm3.valid) {
-      console.log('we can submit form');
-      this.service.onRegister(this.registrationData).subscribe(
-        (response: any) => {
-          if(response.status === "incorrect") {
-            console.log(response);
-          } else {
-            console.log("success");
-          }
-        },
-        (error) => {
-          console.log('ERROR: ', error);
-        }
-      );
+    if (this.registerForm3.valid && this.registerForm3.get('emailCode')?.value == this.verification_code.toString()) {
+      // this.service.onRegister(this.registrationData).subscribe(
+      //   (response: any) => {
+      //     if(response.status === "incorrect") {
+      //       console.log(response);
+      //     } else {
+      //       console.log("success");
+      //     }
+      //   },
+      //   (error) => {
+      //     console.log('ERROR: ', error);
+      //   }
+      // );
+      console.log('success');
+    } else {
+      console.log(this.registerForm3.get('emailCode')?.value, this.verification_code);
+      alert("error");
     }
   }
 
@@ -217,6 +222,22 @@ export class RegisterComponent {
   formatPhone(event: any) {
     const value = event.target.value;
     event.target.value = this.formattedInputValue(value);
+  }
+
+  //CODES STUIFF
+
+  sendEmailCode() {
+    this.verification_code = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+    //const email = this.email?.value;
+    const email = 'yakymivyura@gmail.com';
+    this.service.sendToEmail(email, this.verification_code).subscribe(
+      (response: any) => {
+        console.log(response);
+      },
+      error => {
+        console.log('ERROR: ', error);
+      }
+    );
   }
 
 }

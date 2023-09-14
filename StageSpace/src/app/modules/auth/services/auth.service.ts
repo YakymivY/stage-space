@@ -14,7 +14,7 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   onRegister(data: {}) {
-      return this.http.post(environment.nonApiURL + '/register', { data }); //-> authorization.ts
+    return this.http.post(environment.nonApiURL + '/register', { data }); //-> authorization.ts
   }
 
   onLogin(email: string, password: string) {
@@ -28,5 +28,9 @@ export class AuthService {
   checkEmail(email: any): Observable<any> {
     const params = new HttpParams().set('email', email);
     return this.http.get(environment.nonApiURL + '/check-email', { params }); //-> authorization.ts
+  }
+
+  sendToEmail(email: any, verification_code: number) {
+    return this.http.post(environment.nonApiURL + '/send-email', { email, verification_code }); //-> authorization.ts
   }
 }

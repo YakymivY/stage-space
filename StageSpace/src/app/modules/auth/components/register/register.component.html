@@ -3,65 +3,24 @@
 
         <h1>Regis<span class="single">t</span>er</h1>
 
-        <!-- <div class="switch-container container p-0 mb-3">
-            <ul class="nav nav-pills nav-justified">
-                <li class="nav-item">
-                  <a class="nav-link" [class.active]="roleActive" (click)="actorPill()" aria-current="page">Actor</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" [class.active]="!roleActive" (click)="directorPill()">Director</a>
-                </li>
-              </ul>
-        </div> -->
-
-        <!-- <form action="" class="d-flex flex-column align-items-center" (ngSubmit) = "onSubmit()">
-            <div class="d-flex justify-content-between form__container mt-2">
-                <label for="name" class="register__label d-flex align-items-center">Name</label>
-                <input type="text" class="register__input form-control" id="name" name="name" [(ngModel)]="name" reauired>
-            </div>
-            <div class="d-flex justify-content-between form__container mt-2">
-                <label for="surname" class="register__label d-flex align-items-center">Surname</label>
-                <input type="text" class="register__input form-control" id="surname" name="surname" [(ngModel)]="surname" reauired>
-            </div>
-            <div class="d-flex justify-content-between form__container mt-2">
-                <label for="birthdate" class="register__label d-flex align-items-center">Birthdate</label>
-                <input type="date" class="register__input form-control" id="birthdate" name="birthdate" [(ngModel)]="birthdate" reauired>
-            </div>
-            <div class="d-flex justify-content-between form__container mt-2">
-                <label for="email" class="register__label d-flex align-items-center">Email</label>
-                <input type="email" class="register__input form-control" id="email" name="email" #emailInput="ngModel" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" [(ngModel)]="email">
-            </div>
-            <div class="d-flex justify-content-between form__container mt-2">
-                <label for="password" class="register__label d-flex align-items-center">Password</label>
-                <input type="password" class="register__input form-control" id="password" name="password" [(ngModel)]="password" reauired>
-            </div>
-            <div class="d-flex justify-content-between form__container mt-2">
-                <label for="confirm" class="register__label d-flex align-items-center">Confirm</label>
-                <input type="password" class="register__input form-control" id="confirm" name="confirm" [(ngModel)]="confirm" reauired>
-            </div>
-            <p class="text-danger">{{ error }}</p>
-            <p class="text-danger" *ngIf="emailInput.invalid && emailInput.touched">Incorrect email format</p>
-            <button type="submit" class="btn btn-info mt-4" [disabled]="emailInput.invalid && emailInput.touched">Register</button>
-        </form> -->
-
         <form [formGroup]="registerForm1" class="d-flex flex-column align-items-center" (ngSubmit) = "nextStep(registerForm1)">
             
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="name" class="register__label d-flex align-items-center">Name</label>
-                <input type="text" class="register__input form-control" id="name" [ngClass]="{ 'input__error': name && name.invalid && name.touched }" formControlName="name">
+                <input type="text" autocomplete="off" class="register__input form-control" id="name" [ngClass]="{ 'input__error': name && name.invalid && name.touched }" formControlName="name">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="surname" class="register__label d-flex align-items-center">Surname</label>
-                <input type="text" class="register__input form-control" id="surname" [ngClass]="{ 'input__error': surname && surname.invalid && surname.touched }" formControlName="surname">
+                <input type="text" autocomplete="off" class="register__input form-control" id="surname" [ngClass]="{ 'input__error': surname && surname.invalid && surname.touched }" formControlName="surname">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="birthdate" class="register__label d-flex align-items-center">Birthdate</label>
-                <input type="date" class="register__input form-control" id="birthdate" [ngClass]="{ 'input__error': birthdate && birthdate.invalid && birthdate.touched }" formControlName="birthdate">
+                <input type="date" autocomplete="off" class="register__input form-control" id="birthdate" [ngClass]="{ 'input__error': birthdate && birthdate.invalid && birthdate.touched }" formControlName="birthdate">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="institution" class="register__label d-flex align-items-center">Studying</label>
                 <div class="register__searchbox d-flex flex-column justify-content-center">
-                    <input *ngIf="haveEducation" type="text" class="form-control m-0" id="institution" autocomplete="off" [value]="institutionValue" (input)="showInstitutions($event)" (focus)="showInstitutions($event)" [ngClass]="{ 'input__error': institution && institution.invalid && institution.touched }" formControlName="institution">
+                    <input *ngIf="haveEducation" type="text" autocomplete="off" class="form-control m-0" id="institution" [value]="institutionValue" (input)="showInstitutions($event)" (focus)="showInstitutions($event)" [ngClass]="{ 'input__error': institution && institution.invalid && institution.touched }" formControlName="institution">
                     <div class="result-box">
                         <ul class="p-0">
                             <li *ngFor="let institute of institutionsToOutput; let i = index;" (click)="displayInstitutionValue(institute)">{{ institute }}</li>
@@ -83,7 +42,7 @@
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="email" class="register__label d-flex align-items-center">Email</label>
-                <input type="email" placeholder="email@example.com" class="register__input form-control" [ngClass]="{ 'input__error': email && email.invalid && email.touched }" id="email" formControlName="email">
+                <input type="email" autocomplete="off" placeholder="email@example.com" class="register__input form-control" [ngClass]="{ 'input__error': email && email.invalid && email.touched }" id="email" formControlName="email">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="password" class="register__label d-flex align-items-center">Password</label>
@@ -96,13 +55,13 @@
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="phone" class="register__label d-flex align-items-center">Phone number</label>
                 <div class="register__searchbox d-flex align-items-center">
-                    <input type="text" class="phone__dropdown form-control m-0" autocomplete="off" id="phoneCode" [value]="phoneCodeValue" (input)="showPhoneCodes($event)" (focus)="clearPhoneCodes()">
+                    <input type="text"autocomplete="off" class="phone__dropdown form-control m-0" id="phoneCode" [value]="phoneCodeValue" (input)="showPhoneCodes($event)" (focus)="clearPhoneCodes()">
                     <div class="result-box">
                         <ul class="p-0">
                             <li *ngFor="let phoneCode of phoneCodesToOutput; let i = index;" (click)="displayPhoneCodeValue(phoneCode)">{{ phoneCode }}</li>
                         </ul>
                     </div>
-                    <input type="tel" inputmode="numeric" placeholder="(XX) XXX XX XX" autocomplete="off" (input)="formatPhone($event)" class="register__input form-control" [ngClass]="{ 'input__error': phone && phone.invalid && phone.touched }" id="phone" formControlName="phone">
+                    <input type="tel" autocomplete="off" inputmode="numeric" placeholder="(XX) XXX XX XX" (input)="formatPhone($event)" class="register__input form-control" [ngClass]="{ 'input__error': phone && phone.invalid && phone.touched }" id="phone" formControlName="phone">
                 </div>
             </div>
             <button type="submit" class="btn btn-info mt-4">Next</button>
@@ -128,7 +87,7 @@
             </div>
             <div *ngIf="haveExperience" class="d-flex justify-content-between form__container mt-2">
                 <label for="works" class="register__label d-flex align-items-center">Your works</label>
-                <input type="text" placeholder="https://..." class="register__input form-control" id="works" formControlName="works">
+                <input type="text" autocomplete="off" placeholder="https://..." class="register__input form-control" id="works" formControlName="works">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <input type="checkbox" id="no-experience" formControlName="noExperience" (click)="onExperience()">
@@ -143,11 +102,17 @@
         <form [formGroup]="registerForm3" class="d-flex flex-column align-items-center" (ngSubmit) = "onSubmit()">
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="phoneCode" class="register__label d-flex align-items-center">Phone Code</label>
-                <input type="text" class="register__input form-control" id="phoneCode" [ngClass]="{ 'input__error': phoneCode && phoneCode.invalid && phoneCode.touched }" formControlName="phoneCode">
+                <div class="input-group">
+                    <input type="text" autocomplete="off" class="register__input form-control" id="phoneCode" aria-describedby="button-addon2" [ngClass]="{ 'input__error': phoneCode && phoneCode.invalid && phoneCode.touched }" formControlName="phoneCode">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Send</button>
+                </div>
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="emailCode" class="register__label d-flex align-items-center">Email Code</label>
-                <input type="text" class="register__input form-control" id="emailCode" [ngClass]="{ 'input__error': emailCode && emailCode.invalid && emailCode.touched }" formControlName="emailCode">
+                <div class="input-group">
+                    <input type="text" autocomplete="off" class="register__input form-control" id="emailCode" aria-describedby="button-addon2" [ngClass]="{ 'input__error': emailCode && emailCode.invalid && emailCode.touched }" formControlName="emailCode">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="sendEmailCode()">Send</button>
+                </div>
             </div>
             <button type="submit" class="btn btn-info mt-4" [disabled]="">Register</button>
         </form>
