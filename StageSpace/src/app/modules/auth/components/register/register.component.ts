@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -7,13 +7,13 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
 
   registerForm1 = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(2)]),
     surname: new FormControl('', [Validators.required, Validators.minLength(2)]),
     birthdate: new FormControl('', Validators.required),
-    institution: new FormControl(''),
+    institution: new FormControl('', [Validators.required]),
     status: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
@@ -23,8 +23,7 @@ export class RegisterComponent {
 
   registerForm2 = new FormGroup({
     proffesion: new FormControl('', Validators.required),
-    works: new FormControl(''),
-    noExperience: new FormControl('')
+    works: new FormControl('')
   });
 
   registerForm3 = new FormGroup({
@@ -32,7 +31,7 @@ export class RegisterComponent {
     emailCode: new FormControl('', Validators.required)
   });
 
-  currentStep: number = 3;
+  currentStep: number = 1;
   haveExperience: boolean = true;
   registrationData = {};
 
@@ -46,10 +45,22 @@ export class RegisterComponent {
   phoneCodeValue: string = '+380';
 
   verification_code: number = NaN;
+  userId: string = '';
 
 
   constructor (private service: AuthService) {}
 
+  ngOnInit(): void {
+    // this.name?.valueChanges.subscribe(
+    //   (name) => {
+    //     if (name) {
+    //       this.institution?.addValidators(Validators.required);
+    //     } else {
+    //       this.institution?.removeValidators(Validators.required);
+    //     }
+    //   }
+    // );
+  }
 
   get name () {
     return this.registerForm1.get('name');
@@ -85,9 +96,6 @@ export class RegisterComponent {
   get works () {
     return this.registerForm1.get('works');
   }
-  get no_experience () {
-    return this.registerForm1.get('no-experience');
-  }
   //
   get phoneCode () {
     return this.registerForm1.get('phoneCode');
@@ -98,11 +106,22 @@ export class RegisterComponent {
   //
 
   passwordMatchValidator(control: FormControl): { [key: string]: boolean } | null {
-    const password = this?.registerForm1?.get('password')?.value;
+    const password = this.registerForm1?.get('password')?.value;
     const confirmPassword = control.value;
 
     return password === confirmPassword ? null : { 'passwordMismatch': true };
   }
+
+  // institutionInputValidator(): { [key: string]: boolean } | null {
+  //   const institutionValue = this.institution?.value;
+  //   if(institutionValue) {
+  //     //field is not empty
+  //     return !this.allInstitutions.includes(institutionValue as string) ? null : { 'CorrectInstitution': true }; //value is in array?
+  //   } else {
+  //     //field is empty
+  //     return this.haveEducation ? null :  { 'CorrectInstitution': true };
+  //   }
+  // }
 
   onSubmit() {
     if (this.registerForm3.valid && this.registerForm3.get('emailCode')?.value == this.verification_code.toString()) {
@@ -125,6 +144,20 @@ export class RegisterComponent {
     }
   }
 
+  createUser(form: FormGroup) {
+    if(form.valid) {
+      this.service.createUser(form.value.name, form.value.surname, form.value.email, form.value.password).subscribe(
+        (response: any) => {
+          if(response.status === 'success') this.registrationData = Object.assign({}, this.registrationData, { userId: this.userId });
+          console.log(response);
+        }, 
+        error => {
+          console.log("ERROR: ", error);
+        }
+      );
+    }
+  }
+
   nextStep(form: FormGroup) {
     if (this.currentStep < 3) {
       if (form.valid) {
@@ -144,9 +177,9 @@ export class RegisterComponent {
         } else {
           this.currentStep++;
         }
+        this.registrationData = Object.assign({}, this.registrationData, form.value);
       }
     }
-    this.registrationData = Object.assign({}, this.registrationData, form.value);
   }
 
   onExperience() {
