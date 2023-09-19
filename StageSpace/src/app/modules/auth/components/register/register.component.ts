@@ -13,17 +13,20 @@ export class RegisterComponent implements OnInit {
     name: new FormControl('', [Validators.required, Validators.minLength(2)]),
     surname: new FormControl('', [Validators.required, Validators.minLength(2)]),
     birthdate: new FormControl('', Validators.required),
-    institution: new FormControl('', [Validators.required]),
+    institution: new FormControl({ value: '', disabled: false }, []),
+    onEducation: new FormControl(false),
     status: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     confirm: new FormControl('', [Validators.required, this.passwordMatchValidator.bind(this)]),
+    countryCode: new FormControl('+380', Validators.required),
     phone: new FormControl('', Validators.required)
   });
 
   registerForm2 = new FormGroup({
     proffesion: new FormControl('', Validators.required),
-    works: new FormControl('')
+    works: new FormControl({ value: '', disabled: false }, []),
+    onExperience: new FormControl(false)
   });
 
   registerForm3 = new FormGroup({
@@ -39,10 +42,12 @@ export class RegisterComponent implements OnInit {
   institutionsToOutput: string[] = [];
   institutionValue: string = '';
   haveEducation: boolean = true;
+  tosShowInstitutions: boolean = false;
   
-  allPhoneCodes: string[] = ["+380", "+1", "+654"];
+  allPhoneCodes: string[] = ["+380", "+1", "+654", "+333"];
   phoneCodesToOutput: string[] = [];
-  phoneCodeValue: string = '+380';
+  phoneCodeValue: string = '';
+  toShowCountryCodes: boolean = false;
 
   verification_code: number = NaN;
   userId: string = '';
@@ -51,15 +56,31 @@ export class RegisterComponent implements OnInit {
   constructor (private service: AuthService) {}
 
   ngOnInit(): void {
-    // this.name?.valueChanges.subscribe(
-    //   (name) => {
-    //     if (name) {
-    //       this.institution?.addValidators(Validators.required);
-    //     } else {
-    //       this.institution?.removeValidators(Validators.required);
-    //     }
-    //   }
-    // );
+    //disable/enable institution input on checkbox
+    this.onEducation?.valueChanges.subscribe(
+      (value) => {
+        if (value) {
+          this.institution?.disable();
+          this.institution?.removeValidators(Validators.required);
+        } else {
+          this.institution?.enable();
+          this.institution?.addValidators(Validators.required);
+        }
+      }
+    );
+
+    //disable/enable works input on checkbox
+    this.onExperience?.valueChanges.subscribe(
+      (value) => {
+        if (value) {
+          this.works?.disable();
+          this.works?.removeValidators(Validators.required);
+        } else {
+          this.works?.enable();
+          this.works?.addValidators(Validators.required);
+        }
+      }
+    );
   }
 
   get name () {
@@ -74,6 +95,9 @@ export class RegisterComponent implements OnInit {
   get institution () {
     return this.registerForm1.get('institution');
   }
+  get onEducation () {
+    return this.registerForm1.get('onEducation');
+  }
   get status () {
     return this.registerForm1.get('status');
   }
@@ -86,22 +110,28 @@ export class RegisterComponent implements OnInit {
   get confirm () {
     return this.registerForm1.get('confirm');
   }
+  get countryCode () {
+    return this.registerForm1.get('countryCode');
+  }
   get phone () {
     return this.registerForm1.get('phone');
   }
   //
   get proffesion () {
-    return this.registerForm1.get('proffesion');
+    return this.registerForm2.get('proffesion');
   }
   get works () {
-    return this.registerForm1.get('works');
+    return this.registerForm2.get('works');
+  }
+  get onExperience () {
+    return this.registerForm2.get('onExperience');
   }
   //
   get phoneCode () {
-    return this.registerForm1.get('phoneCode');
+    return this.registerForm3.get('phoneCode');
   }
   get emailCode () {
-    return this.registerForm1.get('emailCode');
+    return this.registerForm3.get('emailCode');
   }
   //
 
@@ -164,10 +194,15 @@ export class RegisterComponent implements OnInit {
         if(this.currentStep === 1) {
           this.service.checkEmail(this.email?.value).subscribe(
             (response: any) => {
-              if (response.exist) {
+              if (response.exist) { 
                 alert('This email is already registered');
               } else {
-                this.currentStep++;
+              if (this.onEducation || this.allInstitutions.includes(this.institution?.value as string)) {
+                  this.createUser(form); //pushing user to db
+                  this.currentStep++;
+                } else {
+                  alert("Incorrect institution");
+                }
               }
             },
             error => {
@@ -181,17 +216,7 @@ export class RegisterComponent implements OnInit {
       }
     }
   }
-
-  onExperience() {
-    this.haveExperience = !this.haveExperience;
-    this.registerForm2.get('works')?.setValue(''); //clearing works field
-  }
-
-  onEducation() {
-    this.haveEducation = !this.haveEducation;
-    this.registerForm1.get('institution')?.setValue(''); //clearing institution field
-  }
-
+  
   showInstitutions(event: any) {
     const value = event.target.value; //input data
     let result = [];

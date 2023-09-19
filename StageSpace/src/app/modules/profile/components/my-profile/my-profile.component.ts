@@ -2,11 +2,13 @@ import { StartService } from 'src/app/modules/main/services/start.service';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { ProfileService } from '../../services/profile.service';
+import { Router } from '@angular/router';
 
 //SHARED
 import { User, Article } from '../../../../shared/shared.interfaces';
 import { convertDate } from 'src/app/shared/utils';
 import { UtilsService } from 'src/app/shared/services/utils.service';
+import { ArticleService } from 'src/app/modules/articles/services/article.service';
 //
 
 @Component({
@@ -22,7 +24,8 @@ export class MyProfileComponent implements OnInit {
 
   modalImage: string = '';
 
-  constructor(private authService: AuthService, private startService: StartService, private utilsService: UtilsService, private service: ProfileService) {}
+  constructor(private authService: AuthService, private startService: StartService, private utilsService: UtilsService, private service: ProfileService, private articleService: ArticleService,
+    private router: Router) {}
 
   ngOnInit() {
     this.utilsService.loadUser().subscribe(
@@ -60,6 +63,19 @@ export class MyProfileComponent implements OnInit {
       (response: any) => {
         console.log(response);
         //some other actions
+      },
+      error => {
+        console.log("ERROR: ", error);
+      }
+    );
+  }
+
+  deleteArticle (id: any) {
+    this.articles = this.articles.filter(article => article._id != id);
+    this.articleService.deleteArticle(id).subscribe(
+      (response: any) => {
+        this.router.navigate([response.redirect]);
+        //this.articles = response.articles;
       },
       error => {
         console.log("ERROR: ", error);
