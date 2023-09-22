@@ -18,6 +18,7 @@ export class AuthService {
   }
 
   onRegister(data: {}) {
+    console.log(data);
     return this.http.post(environment.nonApiURL + '/register', { data }); //-> authorization.ts
   }
 

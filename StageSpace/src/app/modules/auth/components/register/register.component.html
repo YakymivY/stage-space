@@ -21,10 +21,10 @@
                 <label for="institution" class="register__label d-flex align-items-center">Studying</label>
                 <div class="register__searchbox d-flex flex-column justify-content-center">
                     <div class="position-relative">
-                        <input type="text" autocomplete="off" class="form-control m-0" id="institution" [value]="institutionValue" (input)="showInstitutions($event)" (focus)="showInstitutions($event); tosShowInstitutions = true;" (blur)="tosShowInstitutions = false;" [ngClass]="{ 'input__error': institution && institution.invalid && institution.touched }" formControlName="institution">
-                        <div *ngIf="tosShowInstitutions" class="result-box">
+                        <input type="text" autocomplete="off" class="form-control m-0" id="institution" (input)="showInstitutions($event)" (focus)="showInstitutions($event); tosShowInstitutions = true;" [ngClass]="{ 'input__error': institution && institution.invalid && institution.touched }" formControlName="institution">
+                        <div *ngIf="tosShowInstitutions" class="result-box" id="result-box">
                             <ul class="p-0 m-0">
-                                <li *ngFor="let institute of institutionsToOutput; let i = index;" (click)="displayInstitutionValue(institute);">{{ institute }}</li>
+                                <li *ngFor="let institute of institutionsToOutput; let i = index;" (click)="displayInstitutionValue($event, institute);">{{ institute }}</li>
                             </ul>
                         </div>
                     </div>
@@ -57,8 +57,8 @@
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="phone" class="register__label d-flex align-items-center">Phone number</label>
                 <div class="register__searchbox d-flex align-items-center">
-                    <input type="text"autocomplete="off" class="phone__dropdown form-control m-0" id="phoneCode" [value]="phoneCodeValue" (input)="showPhoneCodes($event)" (focus)="clearPhoneCodes(); toShowCountryCodes = true;" (blur)="toShowCountryCodes = false;" formControlName="countryCode">
-                    <div *ngIf="toShowCountryCodes" class="result-box">
+                    <input type="text"autocomplete="off" class="phone__dropdown form-control m-0" id="phoneCode" (input)="showPhoneCodes($event)" (focus)="clearPhoneCodes(); toShowCountryCodes = true;" [ngClass]="{ 'input__error': countryCode && countryCode.invalid && countryCode.touched }" formControlName="countryCode">
+                    <div *ngIf="toShowCountryCodes" class="result-box" id="result-box2">
                         <ul class="p-0">
                             <li *ngFor="let phoneCode of phoneCodesToOutput; let i = index;" (click)="displayPhoneCodeValue(phoneCode)">{{ phoneCode }}</li>
                         </ul>
@@ -95,7 +95,8 @@
                 <input type="checkbox" id="no-experience" formControlName="onExperience">
                 <label for="no-experience" class="register__label d-flex align-items-center">No experience</label>
             </div>
-            <button type="submit" class="btn btn-info mt-4" [disabled]="">Next</button>
+            <button type="submit" class="btn btn-info mt-4">Next</button>
+            <button class="btn btn-outline-info mt-2" (click)="currentStep = 1">Back</button>
         </form>
     </div>
 
@@ -117,6 +118,7 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-info mt-4" [disabled]="">Register</button>
+            <button class="btn btn-outline-info mt-2" (click)="currentStep = 2">Back</button>
         </form>
     </div>
 

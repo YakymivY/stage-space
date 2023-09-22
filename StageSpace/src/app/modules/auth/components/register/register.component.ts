@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -9,17 +9,35 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
 
+  currentStep: number = 2;
+  haveExperience: boolean = true;
+  registrationData = {};
+
+  allInstitutions: string[] = ["Kyiv Polytechnical University", "Lviv Polytechnical University", "Shevchenka", "Franka", "Nafta"];
+  institutionsToOutput: string[] = [];
+  haveEducation: boolean = true;
+  tosShowInstitutions: boolean = false;
+  
+  allPhoneCodes: string[] = ["+380", "+1", "+654", "+333"];
+  phoneCodesToOutput: string[] = [];
+  toShowCountryCodes: boolean = false;
+
+  verification_code: number = NaN;
+  userId: string = '';
+
+  unsavedChanges: boolean = true;
+
   registerForm1 = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(2)]),
     surname: new FormControl('', [Validators.required, Validators.minLength(2)]),
     birthdate: new FormControl('', Validators.required),
-    institution: new FormControl({ value: '', disabled: false }, []),
+    institution: new FormControl({ value: '', disabled: false }, [Validators.required, this.institutionExistsValidator.bind(this)]),
     onEducation: new FormControl(false),
     status: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     confirm: new FormControl('', [Validators.required, this.passwordMatchValidator.bind(this)]),
-    countryCode: new FormControl('+380', Validators.required),
+    countryCode: new FormControl('+380', [Validators.required, this.phoneExistsValidator.bind(this)]),
     phone: new FormControl('', Validators.required)
   });
 
@@ -33,24 +51,6 @@ export class RegisterComponent implements OnInit {
     phoneCode: new FormControl('', Validators.required),
     emailCode: new FormControl('', Validators.required)
   });
-
-  currentStep: number = 1;
-  haveExperience: boolean = true;
-  registrationData = {};
-
-  allInstitutions: string[] = ["Kyiv Polytechnical University", "Lviv Polytechnical University", "Shevchenka", "Franka", "Nafta"];
-  institutionsToOutput: string[] = [];
-  institutionValue: string = '';
-  haveEducation: boolean = true;
-  tosShowInstitutions: boolean = false;
-  
-  allPhoneCodes: string[] = ["+380", "+1", "+654", "+333"];
-  phoneCodesToOutput: string[] = [];
-  phoneCodeValue: string = '';
-  toShowCountryCodes: boolean = false;
-
-  verification_code: number = NaN;
-  userId: string = '';
 
 
   constructor (private service: AuthService) {}
@@ -81,6 +81,8 @@ export class RegisterComponent implements OnInit {
         }
       }
     );
+
+    
   }
 
   get name () {
@@ -135,6 +137,8 @@ export class RegisterComponent implements OnInit {
   }
   //
 
+
+  //CUSTOM VALIDATORS
   passwordMatchValidator(control: FormControl): { [key: string]: boolean } | null {
     const password = this.registerForm1?.get('password')?.value;
     const confirmPassword = control.value;
@@ -142,78 +146,83 @@ export class RegisterComponent implements OnInit {
     return password === confirmPassword ? null : { 'passwordMismatch': true };
   }
 
-  // institutionInputValidator(): { [key: string]: boolean } | null {
-  //   const institutionValue = this.institution?.value;
-  //   if(institutionValue) {
-  //     //field is not empty
-  //     return !this.allInstitutions.includes(institutionValue as string) ? null : { 'CorrectInstitution': true }; //value is in array?
-  //   } else {
-  //     //field is empty
-  //     return this.haveEducation ? null :  { 'CorrectInstitution': true };
-  //   }
-  // }
+  institutionExistsValidator(control: FormControl): { [key: string]: boolean } | null {
+    const institution = control.value;
+    if (institution) {
+      return this.allInstitutions.includes(institution as string) ? null : { 'incorrectInstitution': true };
+    } else {
+      return { 'incorrectInstitution': true };
+    }
+  }
 
+  phoneExistsValidator(control: FormControl): { [key: string]: boolean } | null {
+    const phoneCode = control.value;
+    console.log(phoneCode);
+    if (phoneCode) {
+      return this.allPhoneCodes.includes(phoneCode as string) ? null : { 'incorrectPhoneCode': true };
+    } else {
+      return { 'incorrectPhoneCode': true };
+    }
+  }
+
+  //
+
+
+  //FORM SUBMISSION
   onSubmit() {
     if (this.registerForm3.valid && this.registerForm3.get('emailCode')?.value == this.verification_code.toString()) {
-      // this.service.onRegister(this.registrationData).subscribe(
-      //   (response: any) => {
-      //     if(response.status === "incorrect") {
-      //       console.log(response);
-      //     } else {
-      //       console.log("success");
-      //     }
-      //   },
-      //   (error) => {
-      //     console.log('ERROR: ', error);
-      //   }
-      // );
+      this.service.onRegister(this.registrationData).subscribe(
+        (response: any) => {
+          if(response.status === "incorrect") {
+            console.log(response);
+          } else {
+            console.log("success");
+          }
+        },
+        (error) => {
+          console.log('ERROR: ', error);
+        }
+      );
       console.log('success');
     } else {
-      console.log(this.registerForm3.get('emailCode')?.value, this.verification_code);
       alert("error");
     }
   }
 
-  createUser(form: FormGroup) {
-    if(form.valid) {
-      this.service.createUser(form.value.name, form.value.surname, form.value.email, form.value.password).subscribe(
-        (response: any) => {
-          if(response.status === 'success') this.registrationData = Object.assign({}, this.registrationData, { userId: this.userId });
-          console.log(response);
-        }, 
-        error => {
-          console.log("ERROR: ", error);
-        }
-      );
-    }
-  }
+  // createUser(form: FormGroup) {
+  //   if(form.valid) {
+  //     this.service.createUser(form.value.name, form.value.surname, form.value.email, form.value.password).subscribe(
+  //       (response: any) => {
+  //         if(response.status === 'success') this.registrationData = Object.assign({}, this.registrationData, { userId: this.userId });
+  //         console.log(response);
+  //       }, 
+  //       error => {
+  //         console.log("ERROR: ", error);
+  //       }
+  //     );
+  //   }
+  // }
 
   nextStep(form: FormGroup) {
     if (this.currentStep < 3) {
       if (form.valid) {
-        if(this.currentStep === 1) {
-          this.service.checkEmail(this.email?.value).subscribe(
-            (response: any) => {
-              if (response.exist) { 
-                alert('This email is already registered');
-              } else {
-              if (this.onEducation || this.allInstitutions.includes(this.institution?.value as string)) {
-                  this.createUser(form); //pushing user to db
-                  this.currentStep++;
-                } else {
-                  alert("Incorrect institution");
-                }
-              }
-            },
-            error => {
-              console.log('ERROR: ', error);
-            }
-          );
-        } else {
-          this.currentStep++;
-        }
+        this.currentStep++;
         this.registrationData = Object.assign({}, this.registrationData, form.value);
+        console.log(form.value);
       }
+    }
+  }
+
+  //tracking mouse click target to close result-box
+  @HostListener('window:click', ['$event'])
+  onWindowClick(event: MouseEvent) {
+    // Handle the click event on the whole window
+    const elemId = (event.target as HTMLElement).id;
+    if (elemId !== "institution" && elemId !== "result-box") {
+      this.tosShowInstitutions = false;
+    }
+    if (elemId !== "phoneCode" && elemId !== "result-box2") {
+      this.toShowCountryCodes = false;
     }
   }
   
@@ -231,14 +240,13 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  hideInstitutions() {
+  displayInstitutionValue(event: any, institute: string) {
+    this.institution?.setValue(institute);
+    this.institution?.updateValueAndValidity();
     this.institutionsToOutput = [];
   }
 
-  displayInstitutionValue(institute: string) {
-    this.institutionValue = institute;
-    this.institutionsToOutput = [];
-  }
+  //PHONE CODES
 
   showPhoneCodes(event: any) {
     let value = '';
@@ -256,12 +264,13 @@ export class RegisterComponent implements OnInit {
   }
 
   clearPhoneCodes() {
-    this.phoneCodeValue = ''; //clearing entered value
+    //this.phoneCodeValue = ''; //clearing entered value
     this.showPhoneCodes(null);
   }
 
   displayPhoneCodeValue(phoneCode: string) {
-    this.phoneCodeValue = phoneCode;
+    this.countryCode?.setValue(phoneCode);
+    this.countryCode?.updateValueAndValidity();
     this.phoneCodesToOutput = [];
   }
 
@@ -297,5 +306,15 @@ export class RegisterComponent implements OnInit {
       }
     );
   }
+
+
+  //alert before reloading
+  // @HostListener('window:beforeunload', ['$event'])
+  // unloadNotification($event: any): void {
+  //   if (this.unsavedChanges) {
+  //     $event.returnValue = 'You have unsaved changes. Are you sure you want to leave this page?';
+  //     //alert('dont do it');
+  //   }
+  // }
 
 }
