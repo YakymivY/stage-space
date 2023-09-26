@@ -9,7 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
 
-  currentStep: number = 2;
+  currentStep: number = 1;
   haveExperience: boolean = true;
   registrationData = {};
 
@@ -43,7 +43,7 @@ export class RegisterComponent implements OnInit {
 
   registerForm2 = new FormGroup({
     proffesion: new FormControl('', Validators.required),
-    works: new FormControl({ value: '', disabled: false }, []),
+    works: new FormControl({ value: '', disabled: false }, [Validators.required]),
     onExperience: new FormControl(false)
   });
 
@@ -62,9 +62,11 @@ export class RegisterComponent implements OnInit {
         if (value) {
           this.institution?.disable();
           this.institution?.removeValidators(Validators.required);
+          //this.institution?.updateValueAndValidity();
         } else {
           this.institution?.enable();
           this.institution?.addValidators(Validators.required);
+          //this.institution?.updateValueAndValidity();
         }
       }
     );
@@ -75,9 +77,36 @@ export class RegisterComponent implements OnInit {
         if (value) {
           this.works?.disable();
           this.works?.removeValidators(Validators.required);
+          //this.works?.updateValueAndValidity();
         } else {
           this.works?.enable();
           this.works?.addValidators(Validators.required);
+          //this.works?.updateValueAndValidity();
+        }
+      }
+    );
+
+    //value input in the institution searchbox
+    this.institution?.valueChanges.subscribe(
+      (value: any) => {
+        this.showInstitutions(value);
+      }
+    );
+
+    //value input in the phoneCode searchbox
+    this.countryCode?.valueChanges.subscribe(
+      (value: any) => {
+        this.showPhoneCodes(value);
+      }
+    );
+
+    this.phone?.valueChanges.subscribe(
+      (value: any) => {
+        //format the value
+        const formattedValue = this.formattedInputValue(value);
+        //prevent infinite loop
+        if (this.phone?.value !== formattedValue) {
+          this.phone?.setValue(formattedValue); // Update the value
         }
       }
     );
@@ -157,7 +186,6 @@ export class RegisterComponent implements OnInit {
 
   phoneExistsValidator(control: FormControl): { [key: string]: boolean } | null {
     const phoneCode = control.value;
-    console.log(phoneCode);
     if (phoneCode) {
       return this.allPhoneCodes.includes(phoneCode as string) ? null : { 'incorrectPhoneCode': true };
     } else {
@@ -187,6 +215,7 @@ export class RegisterComponent implements OnInit {
     } else {
       alert("error");
     }
+    return false;
   }
 
   // createUser(form: FormGroup) {
@@ -226,10 +255,10 @@ export class RegisterComponent implements OnInit {
     }
   }
   
-  showInstitutions(event: any) {
-    const value = event.target.value; //input data
+  showInstitutions(value: any) {
+    //const value = event.target.value; //input data
     let result = [];
-    
+
     if (value.length) { //checking whether field is empty
       result = this.allInstitutions.filter((keyword) => {
         return keyword.toLowerCase().includes(value.toLowerCase()); //finding corresponding words in an array
@@ -248,12 +277,14 @@ export class RegisterComponent implements OnInit {
 
   //PHONE CODES
 
-  showPhoneCodes(event: any) {
-    let value = '';
-    if (event) value = event.target.value; //input data
+  showPhoneCodes(value: any) {
+    //let value = '';
+    //if (event) value = event.target.value; //input data
     let result = [];
+
+    console.log(value);
     
-    if (value.length) { //checking whether field is empty
+    if (value && value.length) { //checking whether field is empty
       result = this.allPhoneCodes.filter((keyword) => {
         return keyword.toLowerCase().includes(value.toLowerCase()); //finding corresponding words in an array
       });
@@ -265,7 +296,8 @@ export class RegisterComponent implements OnInit {
 
   clearPhoneCodes() {
     //this.phoneCodeValue = ''; //clearing entered value
-    this.showPhoneCodes(null);
+    this.countryCode?.setValue('+');
+    //this.showPhoneCodes(null);
   }
 
   displayPhoneCodeValue(phoneCode: string) {
@@ -274,7 +306,7 @@ export class RegisterComponent implements OnInit {
     this.phoneCodesToOutput = [];
   }
 
-  formattedInputValue(value: string) {
+  formattedInputValue(value: string): string {
     if (!value) return value;
     const phoneNumber = value.replace(/[^\d]/g, '');
     const phoneNumberLength = phoneNumber.length;
@@ -284,11 +316,6 @@ export class RegisterComponent implements OnInit {
       return `(${phoneNumber.slice(0,2)}) ${phoneNumber.slice(2)}`;
     }
     return `(${phoneNumber.slice(0,2)}) ${phoneNumber.slice(2,5)} ${phoneNumber.slice(5,7)} ${phoneNumber.slice(7,9)}`;
-  }
-  
-  formatPhone(event: any) {
-    const value = event.target.value;
-    event.target.value = this.formattedInputValue(value);
   }
 
   //CODES STUIFF
@@ -313,7 +340,6 @@ export class RegisterComponent implements OnInit {
   // unloadNotification($event: any): void {
   //   if (this.unsavedChanges) {
   //     $event.returnValue = 'You have unsaved changes. Are you sure you want to leave this page?';
-  //     //alert('dont do it');
   //   }
   // }
 

@@ -21,7 +21,7 @@
                 <label for="institution" class="register__label d-flex align-items-center">Studying</label>
                 <div class="register__searchbox d-flex flex-column justify-content-center">
                     <div class="position-relative">
-                        <input type="text" autocomplete="off" class="form-control m-0" id="institution" (input)="showInstitutions($event)" (focus)="showInstitutions($event); tosShowInstitutions = true;" [ngClass]="{ 'input__error': institution && institution.invalid && institution.touched }" formControlName="institution">
+                        <input type="text" autocomplete="off" class="form-control m-0" id="institution" (focus)="showInstitutions($event); tosShowInstitutions = true;" [ngClass]="{ 'input__error': institution && institution.invalid && institution.touched }" formControlName="institution">
                         <div *ngIf="tosShowInstitutions" class="result-box" id="result-box">
                             <ul class="p-0 m-0">
                                 <li *ngFor="let institute of institutionsToOutput; let i = index;" (click)="displayInstitutionValue($event, institute);">{{ institute }}</li>
@@ -57,16 +57,16 @@
             <div class="d-flex justify-content-between form__container mt-2">
                 <label for="phone" class="register__label d-flex align-items-center">Phone number</label>
                 <div class="register__searchbox d-flex align-items-center">
-                    <input type="text"autocomplete="off" class="phone__dropdown form-control m-0" id="phoneCode" (input)="showPhoneCodes($event)" (focus)="clearPhoneCodes(); toShowCountryCodes = true;" [ngClass]="{ 'input__error': countryCode && countryCode.invalid && countryCode.touched }" formControlName="countryCode">
+                    <input type="text"autocomplete="off" class="phone__dropdown form-control m-0" id="phoneCode" (focus)="clearPhoneCodes(); toShowCountryCodes = true;" [ngClass]="{ 'input__error': countryCode && countryCode.invalid && countryCode.touched }" formControlName="countryCode">
                     <div *ngIf="toShowCountryCodes" class="result-box" id="result-box2">
                         <ul class="p-0">
                             <li *ngFor="let phoneCode of phoneCodesToOutput; let i = index;" (click)="displayPhoneCodeValue(phoneCode)">{{ phoneCode }}</li>
                         </ul>
                     </div>
-                    <input type="tel" autocomplete="off" inputmode="numeric" placeholder="(XX) XXX XX XX" (input)="formatPhone($event)" class="register__input form-control" [ngClass]="{ 'input__error': phone && phone.invalid && phone.touched }" id="phone" formControlName="phone">
+                    <input type="tel" autocomplete="off" inputmode="numeric" placeholder="(XX) XXX XX XX" class="register__input form-control" [ngClass]="{ 'input__error': phone && phone.invalid && phone.touched }" id="phone" formControlName="phone">
                 </div>
             </div>
-            <button type="submit" class="btn btn-info mt-4">Next</button>
+            <button type="submit" class="btn btn-info mt-4" [disabled]="!registerForm1.valid">Next</button>
         </form>
 
         <a href="/login" class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-1">Login</a>
@@ -89,7 +89,7 @@
             </div>
             <div *ngIf="haveExperience" class="d-flex justify-content-between form__container mt-2">
                 <label for="works" class="register__label d-flex align-items-center">Your works</label>
-                <input type="text" autocomplete="off" placeholder="https://..." class="register__input form-control" id="works" formControlName="works">
+                <input type="text" autocomplete="off" placeholder="https://..." class="register__input form-control" id="works" [ngClass]="{ 'input__error': works && works.invalid && works.touched }" formControlName="works">
             </div>
             <div class="d-flex justify-content-between form__container mt-2">
                 <input type="checkbox" id="no-experience" formControlName="onExperience">
@@ -117,7 +117,7 @@
                     <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="sendEmailCode()">Send</button>
                 </div>
             </div>
-            <button type="submit" class="btn btn-info mt-4" [disabled]="">Register</button>
+            <button type="submit" class="btn btn-info mt-4" [disabled]="!registerForm3.valid">Register</button>
             <button class="btn btn-outline-info mt-2" (click)="currentStep = 2">Back</button>
         </form>
     </div>
