@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthInterceptorProvider } from './interceptors/auth.interceptor';
+import { AuthInterceptorProvider } from '../core/interceptors/auth.interceptor';
 import { ModalImageComponent } from './components/modal-image/modal-image.component';
 
 

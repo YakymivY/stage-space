@@ -2,6 +2,10 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+//SHARED
+import { institutions, phoneCodes } from 'src/app/shared/shared.constants';
+//
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -13,17 +17,20 @@ export class RegisterComponent implements OnInit {
   haveExperience: boolean = true;
   registrationData = {};
 
-  allInstitutions: string[] = ["Kyiv Polytechnical University", "Lviv Polytechnical University", "Shevchenka", "Franka", "Nafta"];
+  allInstitutions: string[] = institutions;
   institutionsToOutput: string[] = [];
   haveEducation: boolean = true;
   tosShowInstitutions: boolean = false;
   
-  allPhoneCodes: string[] = ["+380", "+1", "+654", "+333"];
+  allPhoneCodes: string[] = phoneCodes;
   phoneCodesToOutput: string[] = [];
   toShowCountryCodes: boolean = false;
 
   verification_code: number = NaN;
   userId: string = '';
+  sendCodeDisabled: boolean = false;
+  timerSeconds: number = 30;
+  intervalId: any;
 
   unsavedChanges: boolean = true;
 
@@ -211,7 +218,6 @@ export class RegisterComponent implements OnInit {
           console.log('ERROR: ', error);
         }
       );
-      console.log('success');
     } else {
       alert("error");
     }
@@ -323,15 +329,30 @@ export class RegisterComponent implements OnInit {
   sendEmailCode() {
     this.verification_code = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
     //const email = this.email?.value;
-    const email = 'yakymivyura@gmail.com';
+    this.email?.setValue('yakymivyura@gmail.com');
+    const email = this.email?.value;
     this.service.sendToEmail(email, this.verification_code).subscribe(
       (response: any) => {
         console.log(response);
+        this.sendCodeDisabled = true;
+        // setTimeout(() => {
+        //   this.sendCodeDisabled = false;
+        // }, 30000);
+        this.intervalId = setInterval(this.startTimer.bind(this), 1000);
       },
       error => {
         console.log('ERROR: ', error);
       }
     );
+  }
+
+  startTimer () {
+    if (this.timerSeconds > 0) {
+      this.timerSeconds--;
+    } else {
+      clearInterval(this.intervalId);
+      this.sendCodeDisabled = false;
+    }
   }
 
 
