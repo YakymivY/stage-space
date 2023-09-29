@@ -1,6 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { StartComponent } from '../main/components/start/start.component';
 import { EnterComponent } from './components/enter/enter.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { NgModule } from '@angular/core';

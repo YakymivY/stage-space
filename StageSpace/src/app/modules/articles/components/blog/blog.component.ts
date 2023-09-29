@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 //SHARED
 import { Article, Comment, ModalLike } from '../../../../shared/shared.interfaces';
-import { convertDate } from 'src/app/shared/utils';
+import { UtilsService } from 'src/app/shared/services/utils.service';
 //
 
 @Component({
@@ -28,7 +28,7 @@ export class BlogComponent implements OnInit {
   commentContent: string = '';
   comments: Comment[] = [];
 
-  constructor (private service: ArticleService, private router: Router) {}
+  constructor (private service: ArticleService, private router: Router, private utilsService: UtilsService) {}
 
   ngOnInit () {
     this.service.getAllArticles().subscribe(
@@ -39,7 +39,7 @@ export class BlogComponent implements OnInit {
         }
         for (let i = 0; i < response.length; i++) {
           response[i].likesCount = response[i].likedUserIds.length;
-          response[i].date = convertDate(response[i].date);
+          response[i].date = this.utilsService.convertDate(response[i].date);
           this.commentActive[i] = false;
         }
         console.log(response);

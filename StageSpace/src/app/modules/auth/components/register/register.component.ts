@@ -13,7 +13,7 @@ import { institutions, phoneCodes } from 'src/app/shared/shared.constants';
 })
 export class RegisterComponent implements OnInit {
 
-  currentStep: number = 1;
+  currentStep: number = 3;
   haveExperience: boolean = true;
   registrationData = {};
 
@@ -33,6 +33,11 @@ export class RegisterComponent implements OnInit {
   intervalId: any;
 
   unsavedChanges: boolean = true;
+  thirdFormError: string = '';
+  invalidCodeCounter: number = 0;
+
+  statusArray: string[] = ["Currently studying", "Finished studying"];
+  proffesionArray: string[] = ["Actor", "Director", "Sound", "Cameraman"];
 
   registerForm1 = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(2)]),
@@ -56,7 +61,7 @@ export class RegisterComponent implements OnInit {
 
   registerForm3 = new FormGroup({
     phoneCode: new FormControl('', Validators.required),
-    emailCode: new FormControl('', Validators.required)
+    emailCode: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(6)])
   });
 
 
@@ -107,13 +112,35 @@ export class RegisterComponent implements OnInit {
       }
     );
 
+    //phone value validator
     this.phone?.valueChanges.subscribe(
       (value: any) => {
+        if (this.countryCode?.value == "+380") {
+          //format the value
+          const formattedValue = this.formattedInputValue(value);
+          //prevent infinite loop
+          if (this.phone?.value !== formattedValue) {
+            this.phone?.setValue(formattedValue); // Update the value
+          }
+        } else {
+          //format the value
+          const formattedValue = this.formatNumeric(value, 13);
+          //prevent infinite loop
+          if (this.phone?.value !== formattedValue) {
+            this.phone?.setValue(formattedValue); // Update the value
+          }
+        }
+      }
+    );
+
+    //email code value validator
+    this.emailCode?.valueChanges.subscribe(
+      (value: any) => {
         //format the value
-        const formattedValue = this.formattedInputValue(value);
+        const formattedValue = this.formatNumeric(value, 6);
         //prevent infinite loop
-        if (this.phone?.value !== formattedValue) {
-          this.phone?.setValue(formattedValue); // Update the value
+        if (this.emailCode?.value !== formattedValue) {
+          this.emailCode?.setValue(formattedValue); // Update the value
         }
       }
     );
@@ -200,12 +227,22 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  // emailCodeValidator(control: FormControl): { [key: string]: boolean } | null {
+  //   const emailCode = control.value;
+  //   if (emailCode) {
+  //     return emailCode == this.verification_code.toString() ? null : { 'incorrectEmailCode': true };
+  //   } else {
+  //     return { 'incorrectEmailCode': true }
+  //   }
+  // }
+
   //
 
 
   //FORM SUBMISSION
   onSubmit() {
-    if (this.registerForm3.valid && this.registerForm3.get('emailCode')?.value == this.verification_code.toString()) {
+    const correctEmailCode = this.registerForm3.get('emailCode')?.value == this.verification_code.toString();
+    if (this.registerForm3.valid && correctEmailCode) {
       this.service.onRegister(this.registrationData).subscribe(
         (response: any) => {
           if(response.status === "incorrect") {
@@ -219,7 +256,13 @@ export class RegisterComponent implements OnInit {
         }
       );
     } else {
-      alert("error");
+      if (this.invalidCodeCounter <= 5) {
+        this.thirdFormError = "Incorrect code, try again";
+        this.emailCode?.setValue('');
+        this.invalidCodeCounter++;
+      } else {
+        this.verification_code = 0; ///////////////////////
+      }
     }
     return false;
   }
@@ -287,8 +330,6 @@ export class RegisterComponent implements OnInit {
     //let value = '';
     //if (event) value = event.target.value; //input data
     let result = [];
-
-    console.log(value);
     
     if (value && value.length) { //checking whether field is empty
       result = this.allPhoneCodes.filter((keyword) => {
@@ -324,6 +365,13 @@ export class RegisterComponent implements OnInit {
     return `(${phoneNumber.slice(0,2)}) ${phoneNumber.slice(2,5)} ${phoneNumber.slice(5,7)} ${phoneNumber.slice(7,9)}`;
   }
 
+  formatNumeric(value: string, n: number): string {
+    if (!value) return value;
+    const numbers = value.replace(/[^\d]/g, '');
+    if (numbers.length >= 6) return `${numbers.slice(0,n)}`;
+    return numbers;
+  }
+
   //CODES STUIFF
 
   sendEmailCode() {
@@ -335,9 +383,6 @@ export class RegisterComponent implements OnInit {
       (response: any) => {
         console.log(response);
         this.sendCodeDisabled = true;
-        // setTimeout(() => {
-        //   this.sendCodeDisabled = false;
-        // }, 30000);
         this.intervalId = setInterval(this.startTimer.bind(this), 1000);
       },
       error => {

@@ -5,7 +5,7 @@ import { AuthService } from 'src/app/modules/auth/services/auth.service';
 
 //SHARED
 import { Article, User } from '../../../../shared/shared.interfaces';
-import { convertDate } from 'src/app/shared/utils';
+import { UtilsService } from 'src/app/shared/services/utils.service';
 //
 
 @Component({
@@ -25,7 +25,7 @@ export class ProfileComponent implements OnInit{
   modalImage: string = '';
   
 
-  constructor(private route: ActivatedRoute, private service: StartService) {}
+  constructor(private route: ActivatedRoute, private service: StartService, private utilsService: UtilsService) {}
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit{
     this.service.getUserArticles(this.id).subscribe(
       (response: any) => {
         for (let i = 0; i < response.articles.length; i++) {
-          response.articles[i].date = convertDate(response.articles[i].date);
+          response.articles[i].date = this.utilsService.convertDate(response.articles[i].date);
         }
         this.userArticles = response.articles;
       },

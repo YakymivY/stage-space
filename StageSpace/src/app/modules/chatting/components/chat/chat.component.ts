@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UtilsService } from 'src/app/shared/services/utils.service';
 
 //UTILS
-import { convertDate } from 'src/app/shared/utils';
 import { ChatUser, Message } from 'src/app/shared/shared.interfaces';
+import { UtilsService } from 'src/app/shared/services/utils.service';
 //
 
 @Component({
@@ -43,7 +42,7 @@ export class ChatComponent implements OnInit {
       this.outputUsers(users);
       const combinedArray = this.messages.concat(messages);
       for (let i = 0; i < combinedArray.length; i++) {
-        combinedArray[i].time = convertDate(combinedArray[i].time);
+        combinedArray[i].time = this.utilsService.convertDate(combinedArray[i].time);
       }
       this.messages = combinedArray;
     });

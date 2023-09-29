@@ -15,9 +15,22 @@ export class UtilsService {
 
   async selectFile(event: any) {
     const image = event.target.files[0];
-    const base64 = await convertToBase64(image);
+    const base64 = await this.convertToBase64(image);
     const finalImage = base64;
     return finalImage;
+  }
+
+  convertToBase64(file: any) {
+    return new Promise ((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
   }
 
   //
@@ -26,18 +39,30 @@ export class UtilsService {
     return this.http.get(environment.apiURL + '/get-token-user').pipe(share()); //-> authorization.ts
   }
 
-}
+  convertDate(defaultDate: string): string {
+    const newDate = new Date(defaultDate);
 
+    const yyyy = newDate.getFullYear();
+    let mm = newDate.getMonth() + 1;
+    let dd = newDate.getDate();
+    let hh = newDate.getHours();
+    let min = newDate.getMinutes();
+    let ddString, mmString;
 
-function convertToBase64(file: any) {
-  return new Promise ((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-    fileReader.onload = () => {
-      resolve(fileReader.result);
-    };
-    fileReader.onerror = (error) => {
-      reject(error);
-    };
-  });
+    if (dd < 10) {
+    ddString = '0' + dd;
+    } else {
+    ddString = dd;
+    }
+    if (mm < 10) {
+    mmString = '0' + mm;
+    } else {
+    mmString = mm;
+    }
+
+    const formatted = hh + ':' + min + ' ' + ddString + '.' + mmString + '.' + yyyy;
+
+    return formatted;
+  }
+
 }

@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 
 //SHARED
 import { User, Article } from '../../../../shared/shared.interfaces';
-import { convertDate } from 'src/app/shared/utils';
 import { UtilsService } from 'src/app/shared/services/utils.service';
 import { ArticleService } from 'src/app/modules/articles/services/article.service';
 //
@@ -47,7 +46,7 @@ export class MyProfileComponent implements OnInit {
     this.startService.getUserArticles(this.user?._id).subscribe(
       (response: any) => {
         for (let i = 0; i < response.articles.length; i++) {
-          response.articles[i].date = convertDate(response.articles[i].date);
+          response.articles[i].date = this.utilsService.convertDate(response.articles[i].date);
         }
         this.articles = response.articles;
       },
