@@ -13,7 +13,7 @@ import { institutions, phoneCodes } from 'src/app/shared/shared.constants';
 })
 export class RegisterComponent implements OnInit {
 
-  currentStep: number = 3;
+  currentStep: number = 1;
   haveExperience: boolean = true;
   registrationData = {};
 
@@ -261,7 +261,7 @@ export class RegisterComponent implements OnInit {
         this.emailCode?.setValue('');
         this.invalidCodeCounter++;
       } else {
-        this.verification_code = 0; ///////////////////////
+        this.verification_code = NaN;
       }
     }
     return false;
