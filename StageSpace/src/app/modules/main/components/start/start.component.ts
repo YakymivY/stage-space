@@ -82,6 +82,6 @@ export class StartComponent implements OnInit {
   }
 
   onChatDirector(j: number) {
-    //same actions but for directors
+    this.router.navigate(['/chatting/chat', this.directors[j]._id]);
   }
 }

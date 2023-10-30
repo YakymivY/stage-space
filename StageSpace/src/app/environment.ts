@@ -1,4 +1,4 @@
 export const environment = {
-    apiURL: 'http://localhost:3001/api',
-    nonApiURL: 'http://localhost:3001'
+    apiURL: 'https://stagespaceapi.onrender.com/api',
+    nonApiURL: 'https://stagespaceapi.onrender.com'
 }

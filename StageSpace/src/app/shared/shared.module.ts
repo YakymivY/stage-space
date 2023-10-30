@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthInterceptorProvider } from '../core/interceptors/auth.interceptor';
 import { ModalImageComponent } from './components/modal-image/modal-image.component';
 
 
@@ -12,7 +11,7 @@ import { ModalImageComponent } from './components/modal-image/modal-image.compon
   imports: [
     CommonModule
   ],
-  providers: [AuthInterceptorProvider],
+  providers: [],
   exports: [ModalImageComponent]
 })
 export class SharedModule { }

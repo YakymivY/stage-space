@@ -38,6 +38,7 @@ export class ChatComponent implements OnInit {
 
     //get room, users and messages
     this.socket.on('roomData', ({ room, users, messages }) => {
+      console.log(messages);
       this.outputRoomName(room);
       this.outputUsers(users);
       const combinedArray = this.messages.concat(messages);
