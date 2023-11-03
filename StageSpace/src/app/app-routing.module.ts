@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 // import { EnterComponent } from './enter/enter.component';
 // import { ChatComponent } from './chat/chat.component';
 // import { RegisterComponent } from './register/register.component';
-// import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './modules/auth/components/login/login.component';
 // import { StartComponent } from './start/start.component';
 // import { BlogComponent } from './blog/blog.component';
 // import { NewArticleComponent } from './new-article/new-article.component';
@@ -20,6 +20,7 @@ const routes: Routes = [
     // { path: "articles/new", component: NewArticleComponent },
     // { path: "article/:id", component: ArticleComponent },
     ////////
+    { path: "", component: LoginComponent },
     { path: "articles", 
       loadChildren: () => import('./modules/articles/articles.module').then((m) => m.ArticlesModule) },
     { path: "chatting", 
